@@ -105,6 +105,16 @@
         "секунда до дуэли"
       ],
       "loop": false
+    },
+    "life_sucks": {
+      "file": "life_sucks.mp3",
+      "mood": [
+        "срыв",
+        "забить на всё",
+        "загул",
+        "пьянка"
+      ],
+      "loop": true
     }
   },
   "pending_license": {
