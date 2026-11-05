@@ -31,12 +31,17 @@ const DEFAULT_AXES={spine:["x",1],neck:["x",1],thL:["x",-1],thR:["x",-1],knL:["x
 
 function normalize(obj,entry){
   obj.updateMatrixWorld(true);
-  const box=new THREE.Box3().setFromObject(obj),size=new THREE.Vector3();box.getSize(size);
-  const h=entry.height||1.75;
-  const s=size.y>0?h/size.y:1;obj.scale.multiplyScalar(s);
-  obj.updateMatrixWorld(true);const b2=new THREE.Box3().setFromObject(obj);
-  obj.position.y-=b2.min.y;
+  /* у риггованных моделей рамка сжатой геометрии врёт, поэтому меряем по костям (макушка — самая верхняя кость) */
+  const bones=[];obj.traverse(o=>{if(o.isBone)bones.push(o)});
+  let minY=Infinity,maxY=-Infinity;const v=new THREE.Vector3();
+  if(bones.length>3){bones.forEach(b=>{b.getWorldPosition(v);minY=Math.min(minY,v.y);maxY=Math.max(maxY,v.y)})}
+  else{const box=new THREE.Box3().setFromObject(obj);minY=box.min.y;maxY=box.max.y}
+  const h=entry.height||1.75,size=maxY-minY;
+  const s=size>0?h/size:1;obj.scale.multiplyScalar(s);
+  obj.position.y-=minY*s-(entry.footY||0);
   if(entry.rotY) obj.rotation.y=entry.rotY;
+  /* рамка у сжатой геометрии неверная: отключаем отсечение, иначе модель пропадает */
+  obj.traverse(o=>{if(o.isMesh)o.frustumCulled=false});
 }
 
 function attach(R,id,opt){

@@ -1,10 +1,40 @@
 {
   "characters": {
     "naruto": {
-      "file": "",
+      "file": "characters/naruto.glb",
       "height": 1.68,
-      "faceMaterial": "Face",
-      "faces": {}
+      "bones": {
+        "hips": "Hips",
+        "spine": "Spine02",
+        "neck": "neck",
+        "thL": "LeftUpLeg",
+        "thR": "RightUpLeg",
+        "knL": "LeftLeg",
+        "knR": "RightLeg",
+        "shL": "LeftArm",
+        "shR": "RightArm",
+        "elL": "LeftForeArm",
+        "elR": "RightForeArm"
+      },
+      "source": "Meshy, сгенерировано Барабулкой 05.11.2026; оригинал anime-boy-rigged.glb у неё в Загрузках",
+      "axes": {
+        "thL": [
+          "x",
+          1
+        ],
+        "thR": [
+          "x",
+          1
+        ],
+        "knL": [
+          "x",
+          1
+        ],
+        "knR": [
+          "x",
+          1
+        ]
+      }
     },
     "sai": {
       "file": "",
