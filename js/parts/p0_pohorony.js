@@ -2,8 +2,8 @@
    Из канона здесь известно только то, что уже стоит в прологе (гл. 2.26):
    «В день, когда ты похоронил Джирайю, у тебя ещё оставался Сай. К ночи не осталось и Сая.»
    Всё в квадратных скобках — места под канонный текст. Канон не выдумываем: текст пишется по S-N.txt. */
-SN.stage.defineShot("p0_grave",{env:"funeral",cast:{naruto:[-.4,.6,.3,"stand"],sai:[.5,.5,-.3,"stand"]},cam:[.6,1.7,5.2],look:[0,1.1,-1],face:"sad",shiver:1});
-SN.stage.defineShot("p0_alone",{env:"funeral",cast:{naruto:[0,.6,0,"stand"]},cam:[-.6,1.5,3.2],look:[0,1,0],face:"sad",shiver:1});
+SN.stage.defineShot("p0_grave",{env:"funeral",hunger:1,cast:{naruto:[-.4,.6,.3,"stand"],sai:[.5,.5,-.3,"stand"]},cam:[.6,1.7,5.2],look:[0,1.1,-1],face:"sad",shiver:1});
+SN.stage.defineShot("p0_alone",{env:"funeral",hunger:1,cast:{naruto:[0,.6,0,"stand"]},cam:[-.6,1.5,3.2],look:[0,1,0],face:"sad",shiver:1});
 SN.part({
   id:"p0",n:0,title:"Похороны",start:"a1",
   nodes:{

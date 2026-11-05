@@ -6,7 +6,8 @@
                (если Наруто не помнит: remembers:false → белый вместо алого)
    choke     — изнасилование: щель на одной вещи, серый, его сердце и чужое дыхание, без курсора,
                пропустить нельзя, долго, потом обрыв. Тела не видно
-   mood("heroin") / mood("gray") — состояния на несколько экранов; конец героина всегда разом */
+   mood("heroin") / mood("gray") / mood("hunger") — состояния на несколько экранов; конец героина всегда разом;
+               hunger — сильный голод: мрачное ч/б, фон сильнее плывёт (look.js) */
 (function(){
 "use strict";
 const SN=window.SN=window.SN||{};
@@ -102,6 +103,8 @@ async function mood(name){
     amber=el("layer amber");tween(amber,"opacity",".85",2400,"ease-out");
   }
   if(name==="gray") document.body.classList.add("mood-gray");   /* ломка всегда серая */
+  /* сильный голод: мрачное ч/б через фильтр сцены (look.js), плавно */
+  if(SN.look) SN.look.mood(name==="hunger"?"hunger":null);
 }
 
 /* белая вспышка сама по себе, без писка — «Наруто не помнит» */

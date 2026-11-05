@@ -350,23 +350,23 @@ const ST={ // мизансцены пролога (для будущего пе�
  bar_eyes:{face:"neutral",env:"bar",cast:{naruto:[0,0,0,"eyes"],kurama:[0,-.42,0,"k_cover"],man:[-.85,.2,.9,"m_sit"]},cam:[1.5,1.6,2.2],look:[0,1.1,0]},
  bar_upside:{face:"neutral",env:"bar",cast:{naruto:[0,0,0,"upside"],kurama:[0,-.32,0,"k_over"],man:[-.85,.2,.9,"m_sit"]},cam:[2.6,1.5,1.1],look:[0,1.1,-.1]},
  bar_lean:{face:"smile",env:"bar",cast:{naruto:[0,0,0,"lean"],kurama:[.15,-.3,-.4,"k_lean"],man:[-1,.3,.9,"m_stand"]},cam:[1.8,1.5,2.4],look:[-.3,1,0]},
- street_sit:{face:"sad",env:"street",cast:{naruto:[0,0,.3,"ground"],kurama:[1.1,-.2,-.6,"k_stand"]},cam:[-1.2,1.3,2.8],look:[.4,.7,0],shiver:1},
- street_reach:{face:"cry",env:"street",cast:{naruto:[0,0,.6,"rock"],kurama:[.9,-.1,-1.2,"k_stand"]},cam:[-1.2,1.3,2.8],look:[.4,.7,0]},
- street_crouch:{face:"sad",env:"street",cast:{naruto:[0,0,0,"rock"],kurama:[0,1.15,3.14,"k_crouch"]},cam:[-2.3,1.2,.7],look:[0,.5,.55]},
- street_hand:{face:"scared",env:"street",cast:{naruto:[0,0,0,"reach_up"],kurama:[0,.95,3.14,"k_offer"]},cam:[-2.3,1.3,.9],look:[0,.8,.45]},
- street_stand:{face:"neutral",env:"street",cast:{naruto:[0,0,0,"stand"],kurama:[0,.75,3.14,"stand"]},cam:[-2.4,1.6,.5],look:[0,1.45,.38]},
- street_walk:{face:"neutral",env:"street",cast:{naruto:[-1.85,0,1.57,"walk"],kurama:[-1.45,0,1.57,"k_hold"]},cam:[-1.6,1.5,3.4],look:[-1.6,1.1,0],walk:1},
- street_alone:{face:"sad",env:"street",cast:{naruto:[0,.3,0,"stand"]},cam:[-.8,1.5,3],look:[0,1,0],shiver:1},
+ street_sit:{face:"sad",env:"street",style:"film_night",cast:{naruto:[0,0,.3,"ground"],kurama:[1.1,-.2,-.6,"k_stand"]},cam:[-1.2,1.3,2.8],look:[.4,.7,0],shiver:1},
+ street_reach:{face:"cry",env:"street",style:"film_night",cast:{naruto:[0,0,.6,"rock"],kurama:[.9,-.1,-1.2,"k_stand"]},cam:[-1.2,1.3,2.8],look:[.4,.7,0]},
+ street_crouch:{face:"sad",env:"street",style:"film_night",cast:{naruto:[0,0,0,"rock"],kurama:[0,1.15,3.14,"k_crouch"]},cam:[-2.3,1.2,.7],look:[0,.5,.55]},
+ street_hand:{face:"scared",env:"street",style:"film_night",cast:{naruto:[0,0,0,"reach_up"],kurama:[0,.95,3.14,"k_offer"]},cam:[-2.3,1.3,.9],look:[0,.8,.45]},
+ street_stand:{face:"neutral",env:"street",style:"film_night",cast:{naruto:[0,0,0,"stand"],kurama:[0,.75,3.14,"stand"]},cam:[-2.4,1.6,.5],look:[0,1.45,.38]},
+ street_walk:{face:"neutral",env:"street",style:"film_night",cast:{naruto:[-1.85,0,1.57,"walk"],kurama:[-1.45,0,1.57,"k_hold"]},cam:[-1.6,1.5,3.4],look:[-1.6,1.1,0],walk:1},
+ street_alone:{face:"sad",env:"street",style:"film_night",cast:{naruto:[0,.3,0,"stand"]},cam:[-.8,1.5,3],look:[0,1,0],shiver:1},
  shop_door:{face:"neutral",env:"shop",cast:{naruto:[2.6,1.4,3.14,"stand"],kurama:[2.2,2.2,3.14,"stand"]},cam:[.6,1.7,3.8],look:[2.4,1.2,1.4]},
  shop_in:{face:"neutral",env:"shop",cast:{naruto:[1.1,-.6,.6,"stand"],kurama:[-.6,-.4,.8,"k_stand"]},cam:[0,1.7,3.2],look:[.4,1.1,-.8]},
  bath:{face:"scared",env:"bath",cast:{naruto:[-.2,-.45,3.14,"kneel"],kurama:[.9,.9,-2.5,"k_door"]},cam:[1.1,1.7,1.9],look:[-.1,.6,-.6]},
  bath_talk:{face:"cry",env:"bath",cast:{naruto:[-1.05,0,1.57,"wall"],kurama:[1.05,0,-1.57,"k_sitwall"]},cam:[0,1.25,2.2],look:[0,.55,0]},
  bath_alone:{face:"sad",env:"bath",cast:{naruto:[-1.05,0,1.57,"wall"]},cam:[.3,1.2,2],look:[-.6,.5,0],shiver:1},
  fire_hug:{face:"happycry",env:"shop",cast:{naruto:[0,.4,0,"hugged"],kurama:[0,-.02,0,"k_hug"]},cam:[.4,1.6,3],look:[0,1.25,.3],fire:1},
- fire_street:{face:"happycry",env:"street",cast:{naruto:[-.3,.8,3.14,"glow"],kurama:[.4,.6,3.14,"k_face"]},cam:[-.4,1.4,4.2],look:[0,1.3,.6],fire:1},
+ fire_street:{face:"happycry",env:"street",style:"film_night",cast:{naruto:[-.3,.8,3.14,"glow"],kurama:[.4,.6,3.14,"k_face"]},cam:[-.4,1.4,4.2],look:[0,1.3,.6],fire:1},
  home:{face:"sad",env:"home",cast:{naruto:[-.4,-.8,0,"wall"]},cam:[1,1.6,2.6],look:[-.3,.6,-.6],shiver:1},
  home_door:{face:"scared",env:"home",cast:{naruto:[.8,.2,1.4,"stand"],official:[2.6,1.2,-1.8,"stand"]},cam:[-.6,1.6,2.8],look:[1.6,1.2,.6],door:1},
- twenty:{face:"sad",env:"street",cast:{naruto:[-1,-1.6,0,"slump"],man:[2.6,.6,-1.2,"m_stand"]},cam:[0,1.4,3],look:[-.6,.6,-1],shiver:1},
+ twenty:{face:"sad",env:"street",style:"film_night",cast:{naruto:[-1,-1.6,0,"slump"],man:[2.6,.6,-1.2,"m_stand"]},cam:[0,1.4,3],look:[-.6,.6,-1],shiver:1},
  spofford:{face:"neutral",env:"spofford",cast:{naruto:[0,.75,3.14,"look_up"],tsunade:[0,-.75,0,"sit"]},cam:[1.9,1.6,1.9],look:[0,.95,0]},
 };
 
@@ -375,6 +375,21 @@ const ST={ // мизансцены пролога (для будущего пе�
 const SHOTS=Object.assign({},ST);
 function defineShot(name,s){SHOTS[name]=s}
 let curShot=null,walkX=0;
+/* земля под ногами: модели локаций (тротуар, порог, ковёр) бывают выше нуля, тогда ноги уходили в них.
+   Пускаем луч сверху вниз в точке, где стоит герой, и ставим его на первое, что ниже колена */
+const _rc=new THREE.Raycaster(),_down=new THREE.Vector3(0,-1,0),_from=new THREE.Vector3();
+_rc.layers.enableAll();
+function shown(o){while(o){if(!o.visible)return false;o=o.parent}return true}
+function groundY(x,z){
+  const env=curShot&&ENV[curShot.env];if(!env||(curShot.ground===false)) return 0;
+  env.updateMatrixWorld(true);_from.set(x,.6,z);_rc.set(_from,_down);_rc.far=1.2;
+  const h=_rc.intersectObject(env,true).find(h=>h.object.isMesh&&shown(h.object)&&!h.object.material.transparent);
+  return h?h.point.y:0;
+}
+function reground(){
+  if(!curShot) return;
+  Object.keys(curShot.cast).forEach(k=>{const c=CH[k];if(!c||!c.root.visible)return;const y=groundY(c.target.x,c.target.z);c.target.y=y;c.root.position.y=y});
+}
 function setShot(name,fireOn){
   const s=SHOTS[name];if(!s){console.warn("[SN] нет мизансцены",name);return}
   const envChanged=!curShot||curShot.env!==s.env;curShot=s;walkX=0;
@@ -389,7 +404,7 @@ function setShot(name,fireOn){
     if(c.ghost) c.ghost.root.visible=false;
     const a=s.cast[k];
     if(!a){c.root.visible=false;return}
-    c.root.visible=true;c.target.set(a[0],0,a[1]);c.targetRy=a[2];
+    c.root.visible=true;c.target.set(a[0],groundY(a[0],a[1]),a[1]);c.targetRy=a[2];
     c.root.position.copy(c.target);c.root.rotation.y=a[2];
     setPose(k,a[3]);
     if(envChanged){c.cur={}}
@@ -398,6 +413,7 @@ function setShot(name,fireOn){
   if(CH.tsunade) CH.tsunade.setFace("neutral");
   if(ENV.home&&ENV.home.userData.door) ENV.home.userData.door.intensity=s.door?1.6:0;
   camPosT.set(...s.cam);camLookT.set(...s.look);
+  if(SN.look) SN.look.forShot(s);
   if(envChanged){camPos.copy(camPosT);camLook.copy(camLookT)}
 }
 function setPose(who,p){const c=getChar(who);if(!c)return;c.pose=P[p]||P.stand;c.poseName=p;if(c.mixer&&SN.models)SN.models.playClip(c,p)}
@@ -406,7 +422,7 @@ function setFace(who,f){const c=getChar(who);if(c)c.setFace(f)}
 /* ---------- бледный контур: «тело делает своё» ---------- */
 /* контур отслаивается от фигуры и делает то, что выбрал игрок (ghostPose),
    цветное тело делает обратное (bodyPose) */
-function ghostify(R,mat){R.root.traverse(o=>{if(!o.isMesh)return;if(o.material===outlineM){o.visible=false;return}o.material=mat;o.castShadow=false})}
+function ghostify(R,mat){R.root.traverse(o=>{if(!o.isMesh)return;if(o.material===outlineM){o.visible=false;return}o.material=mat;o.castShadow=false});if(SN.look)SN.look.noEdges(R.root)}
 function ghost(who,ghostPose,bodyPose,ms){
   ms=ms||2600;const c=getChar(who);if(!c)return Promise.resolve();
   if(!c.ghost){
@@ -456,7 +472,7 @@ function loop(now){
   if(ENV.shop&&ENV.shop.visible&&ENV.shop.userData.rec) ENV.shop.userData.rec.rotation.y+=dt*3.5;
   const k=1-Math.pow(.15,rdt);camPos.lerp(camPosT,k);camLook.lerp(camLookT,k);
   camera.position.copy(camPos);camera.position.x+=Math.sin(t*.3)*.04;camera.position.y+=Math.sin(t*.23)*.03;camera.lookAt(camLook);
-  renderer.render(scene,camera);requestAnimationFrame(loop);
+  if(!(SN.look&&SN.look.render(renderer,scene,camera)))renderer.render(scene,camera);requestAnimationFrame(loop);
 }
 function init(el){
   stageEl=el;
@@ -472,5 +488,5 @@ function init(el){
 SN.stage={init,THREE,scene,camera,defineChar,getChar,chars:CH,env,ENV,defineShot,shots:SHOTS,setShot,setPose,setFace,poses:P,ghost,flinch,focusOn,screenOf,
   get timeScale(){return timeScale},set timeScale(v){timeScale=v},
   helpers:{M,T,box,at,ol,sph,limb,spikes,outlineM},
-  get canvas(){return renderer&&renderer.domElement}};
+  get canvas(){return renderer&&renderer.domElement},get renderer(){return renderer},reground,get focusDist(){return camPos.distanceTo(camLook)}};
 })();

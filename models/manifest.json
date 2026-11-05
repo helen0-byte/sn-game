@@ -97,7 +97,8 @@
       ],
       "rotY": 0,
       "keepPlaceholder": 0,
-      "credit": "«Neuenhäuser Friedhof in Celle» (https://skfb.ly/6FUox), kulturschokolade.org, CC BY 4.0"
+      "credit": "«Neuenhäuser Friedhof in Celle» (https://skfb.ly/6FUox), kulturschokolade.org, CC BY 4.0",
+      "edges": false
     },
     "loc_street": {
       "file": "locations/nyc_street.glb",
