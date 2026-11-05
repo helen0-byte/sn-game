@@ -123,19 +123,18 @@
         "труп"
       ],
       "loop": true
-    }
-  },
-  "pending_license": {
-    "cage": {
-      "artist": "Matte Black",
+    },
+    "komodo_dragon": {
+      "file": "komodo_dragon.mp3",
       "mood": [
         "подвальный панк",
+        "концерт",
         "злость",
         "ревность",
         "отсутствие"
       ],
-      "diegetic": true,
-      "license": "CC BY-NC-ND"
+      "loop": false,
+      "diegetic": true
     }
   }
 }
