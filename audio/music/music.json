@@ -115,6 +115,14 @@
         "пьянка"
       ],
       "loop": true
+    },
+    "godzilla": {
+      "file": "godzilla.mp3",
+      "mood": [
+        "схождение с ума",
+        "труп"
+      ],
+      "loop": true
     }
   },
   "pending_license": {
