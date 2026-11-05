@@ -98,6 +98,17 @@
       "rotY": 0,
       "keepPlaceholder": 0,
       "credit": "«Neuenhäuser Friedhof in Celle» (https://skfb.ly/6FUox), kulturschokolade.org, CC BY 4.0"
+    },
+    "loc_street": {
+      "file": "locations/nyc_street.glb",
+      "offset": [
+        -65,
+        0,
+        -10.2
+      ],
+      "rotY": 0,
+      "keepPlaceholder": 1,
+      "credit": "«New York Cartoon City Kitbash Kit promo» (https://sketchfab.com/3d-models/new-york-cartoon-city-kitbash-kit-promo-d0eaea60624f4096925883a0d2574eca), Jungle Jim, CC BY 4.0"
     }
   }
 }
