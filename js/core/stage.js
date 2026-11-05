@@ -183,7 +183,7 @@ const P={
   hugged:{y:.95,nx:-.15,shLx:-.3,shRx:-.3,elL:-1.6,elR:-1.6,sob:1},
   slump:{y:.12,thL:-1.3,thR:-1.3,knL:2.2,knR:2.2,sp:.5,nx:.7,shLx:-.4,shRx:-.4,elL:-.4,elR:-.4},
   // позы, которые есть только клипами настоящей модели (у заглушки — похожие углы)
-  idle:{y:.95},
+  idle:{y:.95},idle2:{y:.95},chat:{y:.95,shRx:-.4,elR:-.8},wave:{y:.95,shRx:-2.4,elR:-.4},step_back:{y:.95,sp:.3},
   depressed:{y:.95,sp:.25,nx:.5,shLx:-.1,shRx:-.1},
   head_pain:{y:.95,sp:.3,nx:.5,shLx:-2.4,shRx:-2.4,elL:-1.9,elR:-1.9},
   drink:{y:.95,shRx:-1.2,elR:-1.9},

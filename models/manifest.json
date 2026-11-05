@@ -58,8 +58,25 @@
       ]
     },
     "sai": {
-      "file": "",
-      "height": 1.74
+      "file": "characters/sai.glb",
+      "height": 1.74,
+      "source": "Meshy (rig + 8 анимаций из библиотеки Meshy), Барабулка 05.11.2026; оригинал Meshy_AI_teen_character_rigged_20261105_animated_mixamo_All_animation.glb в Загрузках",
+      "clips": {
+        "stand": "Idle_7",
+        "idle": "Idle_7",
+        "idle2": "Idle_14",
+        "m_stand": "Idle_7",
+        "walk": "Walking",
+        "run": "Running",
+        "sit": "Chair_Sit_Idle_F",
+        "m_sit": "Chair_Sit_Idle_F",
+        "chat": "Stand_and_Chat",
+        "wave": "Wave_One_Hand",
+        "step_back": {
+          "clip": "Crouch_and_Step_Back",
+          "once": true
+        }
+      }
     },
     "kurama": {
       "file": "",
