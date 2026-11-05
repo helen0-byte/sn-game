@@ -135,6 +135,18 @@
       ],
       "loop": false,
       "diegetic": true
+    },
+    "cast": {
+      "file": "cast.mp3",
+      "mood": [
+        "тема Сая",
+        "гитара",
+        "Сай играет для Наруто"
+      ],
+      "loop": true
     }
+  },
+  "character_themes": {
+    "sai": "cast"
   }
 }
