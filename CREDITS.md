@@ -3,3 +3,9 @@
 - **Кладбище** (локация похорон): «Neuenhäuser Friedhof in Celle» (https://skfb.ly/6FUox), автор kulturschokolade.org, лицензия Creative Commons Attribution 4.0 (http://creativecommons.org/licenses/by/4.0/). Изменения: геометрия упрощена, текстура пережата в webp.
 - **three.js r128**, MIT License (`vendor/three/LICENSE`).
 - **meshoptimizer** (декодер в `vendor/three/meshopt_decoder.js`), MIT License.
+
+## Музыка
+
+Подробный список с лицензиями и сценами: `docs/МУЗЫКА.md`.
+
+- **«Sursaut»**, автор Rod, источник Free Music Archive (https://freemusicarchive.org/music/Rod/), лицензия Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA). Если трек обрезан или зациклен, изменённая версия распространяется под той же лицензией.
