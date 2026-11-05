@@ -22,7 +22,9 @@ const SN=window.SN=window.SN||{};
    grain    — зерно, vig — виньетка, ca — расслоение цвета по краям (как у дешёвой линзы)
    tone     — 0 обычный цвет; 1 «ксерокс»: два тона (тонер и бумага) + одна краска (spot)
    halftone — точки растра в тенях (размер клетки в пикселях, 0 = нет)
-   post     — false: фильтр выключен совсем (как было до этого) */
+   dof      — размытие фона в пикселях: всё, что дальше героев, плывёт, и разные модели не так видны
+   post     — false: фильтр выключен совсем (как было до этого)
+   Наложения (MOODS) меняют любой стиль поверх: hunger — сильный голод, мрачное ч/б. */
 const STYLES={
   off:{post:false,bands:0},
   ink:{   /* комикс: жирная тушь, сочный плоский цвет, растр в тенях */
@@ -32,34 +34,30 @@ const STYLES={
   film:{  /* плёнка 70-х: тонкий контур, выцветшие чёрные, тёплый свет, холодные тени, сильное зерно, лёгкий ореол вокруг света */
     bands:4,ink:1,inkColor:[.07,.05,.07],edge:[.8,.7,0],
     sat:.82,con:1.04,exp:1.08,lift:[.05,.06,.08],gain:[1.06,.98,.86],
-    grain:.08,vig:.5,ca:.35,tone:0,halftone:0,posterize:0,halo:.35},
+    grain:.08,vig:.5,ca:.35,tone:0,halftone:0,posterize:0,halo:.35,dof:5},
   film_kodak:{  /* тёплая любительская плёнка: сильный ореол, засветы с края, мягкий жёлто-розовый свет */
     bands:4,ink:.9,inkColor:[.09,.05,.06],edge:[.8,.7,0],
     sat:.9,con:1.02,exp:1.1,lift:[.08,.06,.07],gain:[1.08,.97,.82],
-    grain:.07,vig:.45,ca:.4,tone:0,halftone:0,posterize:0,halo:.6,leak:.9,leakCol:[1,.38,.12],flicker:.05},
+    grain:.07,vig:.45,ca:.4,tone:0,halftone:0,posterize:0,halo:.6,leak:.9,leakCol:[1,.38,.12],flicker:.05,dof:5},
   film_16mm:{  /* затёртая 16 мм из проектора: пыль, царапины, мерцание, кадр подрагивает, цвет уходит в сепию */
     bands:4,ink:1,inkColor:[.08,.06,.05],edge:[.8,.7,0],
     sat:.55,con:1.1,exp:1.06,lift:[.07,.06,.05],gain:[1.05,.97,.84],
-    grain:.13,vig:.7,ca:.25,tone:0,halftone:0,posterize:0,halo:.3,dust:.8,flicker:.12,weave:1.2},
+    grain:.13,vig:.7,ca:.25,tone:0,halftone:0,posterize:0,halo:.3,dust:.8,flicker:.12,weave:1.2,dof:5},
   film_night:{  /* холодная ночная плёнка Нью-Йорка: зелёно-бирюзовые тени, фонари с красным ореолом */
     bands:4,ink:1,inkColor:[.04,.06,.07],edge:[.8,.7,0],
     sat:.75,con:1.12,exp:1.12,lift:[.02,.09,.1],gain:[.98,1.02,.92],
-    grain:.1,vig:.55,ca:.45,tone:0,halftone:0,posterize:0,halo:1,haloCol:[1,.25,.12],flicker:.03},
-  punk:{  /* панк-плакат: розовая краска, чёрный растр, бумага, приводка сбита (как афиши Round House) */
-    bands:3,ink:1.4,inkColor:[.06,.05,.06],edge:[1,1,.2],
-    sat:1,con:1.2,exp:1.1,grain:.05,vig:.15,ca:0,tone:2,halftone:5,posterize:0,zgamma:.6,
-    paper:[.93,.91,.86],toner:[.07,.06,.07],spot:[1,.24,.6]},
-  punk_flag:{  /* панк-плакат «флаг»: тёплое красной краской, холодное синей, остальное чёрный растр на бумаге */
-    bands:3,ink:1.4,inkColor:[.06,.05,.06],edge:[1,1,.2],
-    sat:1.3,con:1.15,exp:1.1,grain:.05,vig:.15,ca:0,tone:2,halftone:5,posterize:-1,zgamma:.6,
-    paper:[.92,.9,.86],toner:[.07,.06,.07],spot:[.86,.12,.2],spot2:[.12,.2,.55]},
+    grain:.1,vig:.55,ca:.45,tone:0,halftone:0,posterize:0,halo:1,haloCol:[1,.25,.12],flicker:.03,dof:5},
   zine:{  /* фанзин/ксерокс: тонер на бумаге и одна краска (оранжевый маркер), как листок с текстом */
     bands:3,ink:1.4,inkColor:[.08,.07,.08],edge:[1,1,.2],
     sat:1,con:1.25,exp:1.1,lift:[0,0,0],gain:[1,1,1],
     grain:.06,vig:.25,ca:0,tone:1,halftone:4,posterize:0,zgamma:.55,
     paper:[.925,.9,.855],toner:[.08,.067,.078],spot:[.94,.54,.17]},
 };
-let cur=null,curName="off";
+/* наложения поверх стиля. Числа плавно перетекают за ~1.5 с */
+const MOODS={
+  hunger:{sat:0,con:1.38,exp:.96,lift:[.015,.015,.015],gain:[1,1,1],grain:.15,vig:.85,halo:.15,leak:0,dust:.35,flicker:.09,ca:.2,dof:9,ink:1.1}
+};
+let moodByShot=false,cur=null,curName="off",baseName="film_kodak",shotStyle=null,moodName=null,moodK=0,moodFrom=null;
 const dbgMode=+((/[?&]lookdbg=(\d)/.exec(location.search)||[])[1]||0);
 
 /* ---------- 1. материалы ---------- */
@@ -109,8 +107,8 @@ precision highp float;
 varying vec2 vUv;
 uniform sampler2D tColor,tNormal,tDepth;
 uniform vec2 res;uniform float time,near,far;
-uniform float halo,dust,flicker,weave,leak,zgamma,dbg,ink,halftone,grain,vig,ca,sat,con,expo,tone,posterize;
-uniform vec3 spot2,haloCol,leakCol,inkColor,edge,lift,gain,paper,toner,spot;
+uniform float dof,focus,halo,dust,flicker,weave,leak,zgamma,dbg,ink,halftone,grain,vig,ca,sat,con,expo,tone,posterize;
+uniform vec3 haloCol,leakCol,inkColor,edge,lift,gain,paper,toner,spot;
 float lin(float d){float z=d*2.-1.;return (2.*near*far)/(far+near-z*(far-near));}
 float luma(vec3 c){return dot(c,vec3(.299,.587,.114));}
 float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
@@ -125,6 +123,17 @@ void main(){
   vec3 col;
   if(ca>0.){vec2 o=dc*r2*ca*px*60.;col=vec3(texture2D(tColor,uv+o).r,texture2D(tColor,uv).g,texture2D(tColor,uv-o).b);}
   else col=texture2D(tColor,uv).rgb;
+  /* размытие фона: чем дальше точка за героями, тем сильнее плывёт. Сканы без глубины считаются самым дальним фоном */
+  if(dof>0.){
+    float dd=lin(texture2D(tDepth,uv).r);
+    float coc=clamp((dd-focus)/(focus*.9),0.,1.);
+    if(coc>.02){vec3 acc=col;float wsum=1.;
+      for(int i=1;i<20;i++){float fi=float(i);float r=sqrt(fi/19.)*coc*dof;float a=fi*2.39996;
+        vec2 o=vec2(cos(a),sin(a))*r*px;
+        float sd=lin(texture2D(tDepth,uv+o).r);float w=step(focus*.95,sd);   /* герои спереди не растекаются на фон */
+        acc+=texture2D(tColor,uv+o).rgb*w;wsum+=w;}
+      col=acc/wsum;}
+  }
   /* ореол (halation): яркие места светятся красно-оранжевым, как свет, отражённый от подложки плёнки */
   if(halo>0.){vec3 h=vec3(0.);
     for(int i=0;i<12;i++){float a=float(i)*.5236;vec2 o=vec2(cos(a),sin(a))*px*(i<6?7.:15.);
@@ -154,25 +163,7 @@ void main(){
   float L=luma(col);col=mix(vec3(L),col,sat);
   if(posterize>0.) col=floor(col*posterize+.5)/posterize;
   float n=hash(gl_FragCoord.xy+fract(time*7.3)*vec2(91.7,37.3))-.5;
-  if(tone>1.5){
-    /* панк-плакат (шелкография): бумага, одна-две плоские краски и чёрный растр, напечатанный чуть мимо */
-    vec3 hsv=rgb2hsv(clamp(col,0.,1.));
-    float lv=clamp(pow(clamp(L,0.,1.),zgamma)+n*grain*1.5,0.,1.);
-    vec3 cr=texture2D(tColor,uv+vec2(2.,-1.5)*px*(res.x/max(res.x,1.))).rgb;   /* чёрный слой сдвинут: сбитая приводка */
-    float lk=clamp(pow(clamp(luma(cr*expo),0.,1.),zgamma),0.,1.);
-    float a=.785,cs=cos(a),sn=sin(a);vec2 g=mat2(cs,-sn,sn,cs)*gl_FragCoord.xy;   /* растр под 45°, как в типографии */
-    float h=length(fract(g/max(halftone,2.))-.5)*1.41;
-    float kb=max(step(h,smoothstep(.62,.08,lk)),step(lk,.12));
-    float spotOn;vec3 sc=spot;
-    if(posterize<0.){                                           /* «флаг»: тёплое — красной, холодное — синей */
-      float warmH=1.-smoothstep(.06,.14,abs(fract(hsv.x+.5)-.5-0.)*1.);
-      float wr=smoothstep(.25,.45,hsv.y)*max(1.-smoothstep(.0,.1,min(hsv.x,1.-hsv.x)),1.-smoothstep(.04,.1,abs(hsv.x-.08)));
-      float cb=smoothstep(.2,.4,hsv.y)*(1.-smoothstep(.08,.16,abs(hsv.x-.6)));
-      spotOn=max(wr,cb);sc=wr>=cb?spot:spot2;
-    }else spotOn=smoothstep(.9,.55,lv);                         /* одна краска: всё, что не светлое, заливается ей */
-    vec3 c=mix(paper,sc,step(.5,spotOn));
-    col=mix(c,toner,kb);
-  }else if(tone>.5){
+  if(tone>.5){
     /* ксерокс: яркость в тонер/бумагу через растр, тёплые насыщенные места — краской */
     vec3 hsv=rgb2hsv(clamp(col,0.,1.));
     float hd=abs(fract(hsv.x-.07+.5)-.5);                     /* насколько оттенок близок к оранжевому */
@@ -225,14 +216,26 @@ function ensure(renderer){
     qScene=new THREE.Scene();qCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
     quad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({vertexShader:VERT,fragmentShader:FRAG,depthTest:false,depthWrite:false,
       uniforms:{tColor:{value:null},tNormal:{value:null},tDepth:{value:null},res:{value:new THREE.Vector2()},time:{value:0},near:{value:.1},far:{value:50},
-        halo:{value:0},dust:{value:0},flicker:{value:0},weave:{value:0},leak:{value:0},haloCol:{value:new THREE.Vector3(1,.35,.15)},leakCol:{value:new THREE.Vector3(1,.45,.15)},zgamma:{value:1},dbg:{value:0},ink:{value:0},halftone:{value:0},grain:{value:0},vig:{value:0},ca:{value:0},sat:{value:1},con:{value:1},expo:{value:1},tone:{value:0},posterize:{value:0},
+        dof:{value:0},focus:{value:4},halo:{value:0},dust:{value:0},flicker:{value:0},weave:{value:0},leak:{value:0},haloCol:{value:new THREE.Vector3(1,.35,.15)},leakCol:{value:new THREE.Vector3(1,.45,.15)},zgamma:{value:1},dbg:{value:0},ink:{value:0},halftone:{value:0},grain:{value:0},vig:{value:0},ca:{value:0},sat:{value:1},con:{value:1},expo:{value:1},tone:{value:0},posterize:{value:0},
         inkColor:{value:new THREE.Vector3()},edge:{value:new THREE.Vector3(1,1,1)},lift:{value:new THREE.Vector3()},gain:{value:new THREE.Vector3(1,1,1)},
-        paper:{value:new THREE.Vector3(1,1,1)},toner:{value:new THREE.Vector3()},spot:{value:new THREE.Vector3(1,.5,0)},spot2:{value:new THREE.Vector3(.1,.2,.6)}}}));
+        paper:{value:new THREE.Vector3(1,1,1)},toner:{value:new THREE.Vector3()},spot:{value:new THREE.Vector3(1,.5,0)}}}));
     quad.frustumCulled=false;qScene.add(quad);
   }
 }
+const NUM=["ink","halftone","grain","vig","ca","sat","con","exp","halo","dust","flicker","weave","leak","dof"],VEC=["lift","gain"];
+let lastT=0;
+function blended(){
+  const now=performance.now()/1000,dt=Math.min(.1,now-(lastT||now));lastT=now;
+  moodK=Math.max(0,Math.min(1,moodK+(moodName?dt:-dt)/1.5));
+  const m=MOODS[moodName]||moodFrom;if(!m||moodK<=0) return cur;
+  const st=Object.assign({},cur),k=moodK*moodK*(3-2*moodK);
+  NUM.forEach(n=>{if(m[n]!=null)st[n]=(cur[n]||0)*(1-k)+m[n]*k});
+  VEC.forEach(n=>{if(m[n])st[n]=(cur[n]||[n==="gain"?1:0,n==="gain"?1:0,n==="gain"?1:0]).map((v,i)=>v*(1-k)+m[n][i]*k)});
+  return st;
+}
 function pushUniforms(camera){
-  const u=quad.material.uniforms,st=cur;
+  const u=quad.material.uniforms,st=blended();
+  u.focus.value=SN.stage&&SN.stage.focusDist||4;
   u.tColor.value=rtColor.texture;u.tNormal.value=rtNormal.texture;u.tDepth.value=rtNormal.depthTexture;
   u.res.value.set(W,H);u.time.value=performance.now()/1000;u.near.value=camera.near;
   u.far.value=Math.min(camera.far,(SN.stage&&SN.stage.scene.fog&&SN.stage.scene.fog.far)||camera.far);
@@ -241,11 +244,11 @@ function pushUniforms(camera){
   u.ink.value=(st.ink||0)*pr;u.halftone.value=(st.halftone||0)*pr;
   ["grain","vig","ca","sat","con","tone","posterize"].forEach(k=>u[k].value=st[k]!=null?st[k]:u[k].value);
   u.expo.value=st.exp||1;u.dbg.value=dbgMode;u.zgamma.value=st.zgamma||1;
-  ["halo","dust","flicker","weave","leak"].forEach(k=>u[k].value=st[k]||0);
+  ["halo","dust","flicker","weave","leak","dof"].forEach(k=>u[k].value=st[k]||0);
   u.haloCol.value.fromArray(st.haloCol||[1,.35,.15]);u.leakCol.value.fromArray(st.leakCol||[1,.45,.15]);
   u.inkColor.value.fromArray(st.inkColor||[0,0,0]);u.edge.value.fromArray(st.edge||[1,1,1]);
   u.lift.value.fromArray(st.lift||[0,0,0]);u.gain.value.fromArray(st.gain||[1,1,1]);
-  if(st.paper)u.paper.value.fromArray(st.paper);if(st.toner)u.toner.value.fromArray(st.toner);if(st.spot)u.spot.value.fromArray(st.spot);if(st.spot2)u.spot2.value.fromArray(st.spot2);
+  if(st.paper)u.paper.value.fromArray(st.paper);if(st.toner)u.toner.value.fromArray(st.toner);if(st.spot)u.spot.value.fromArray(st.spot);
 }
 
 /* stage.js зовёт это вместо renderer.render; false — значит фильтр выключен, рисуй как обычно */
@@ -270,14 +273,28 @@ function render(renderer,scene,camera){
   return true;
 }
 
-function set(name){
+function apply(name){
   const st=STYLES[name];if(!st){console.warn("[SN] нет стиля",name);return}
+  const bandsChanged=!cur||cur.bands!==st.bands;
   cur=st;curName=name;
-  adopted.forEach(restyle);
+  if(bandsChanged) adopted.forEach(restyle);
   document.documentElement.dataset.look=name;
 }
-const q=/[?&]look=(\w+)/.exec(location.search);
-set(q&&STYLES[q[1]]?q[1]:"film");
+/* основной стиль игры */
+function set(name){baseName=name;apply(shotStyle||baseName)}
+/* стиль сцены: в мизансцене style:"film_night" (ночь), без него — основной */
+function forShot(s){
+  shotStyle=forced?null:(s&&s.style&&STYLES[s.style]?s.style:null);apply(forced||shotStyle||baseName);
+  /* hunger:1 в мизансцене — голод держится, пока идут такие кадры; сюжетный mood("hunger") живёт отдельно */
+  const want=!!(s&&s.hunger);
+  if(want&&!moodName){mood("hunger");moodByShot=true}
+  else if(!want&&moodByShot){mood(null);moodByShot=false}
+}
+/* наложение: mood("hunger") — сильный голод, ч/б; mood(null) — снять */
+function mood(name){moodByShot=false;if(name===moodName)return;if(moodName)moodFrom=MOODS[moodName];moodName=name&&MOODS[name]?name:null}
+const q=/[?&]look=(\w+)/.exec(location.search),forced=q&&STYLES[q[1]]?q[1]:null;
+apply(forced||baseName);
+const qm=/[?&]lookmood=(\w+)/.exec(location.search);if(qm){mood(qm[1]);moodK=1}
 
-SN.look={set,adopt,noEdges,render,styles:STYLES,get name(){return curName}};
+SN.look={set,forShot,mood,adopt,noEdges,render,styles:STYLES,moods:MOODS,get name(){return curName},get moodName(){return moodName}};
 })();

@@ -133,6 +133,7 @@ function attachLocation(group,placeholder,id){
       const keep=entry.keepPlaceholder|0; /* первые N кусков заглушки остаются (например ровная земля под ногами) */
       placeholder.children.forEach((ch,i)=>{if(i>=keep)ch.traverse(o=>{if(o.isMesh)o.visible=false})});
       group.add(model);
+      if(SN.stage&&SN.stage.reground){group.updateMatrixWorld(true);SN.stage.reground()}
     });
   }).catch(e=>console.warn("[SN] локация не загрузилась, остаётся заглушка:",id,e));
 }

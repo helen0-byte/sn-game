@@ -2,7 +2,7 @@
    Это не сюжет, тексты здесь служебные. Сохранение не пишется. */
 SN.stage.defineShot("demo_room",{env:"room",cast:{naruto:[0,0,.2,"stand"]},cam:[1.4,1.5,2.8],look:[0,1,0],face:"neutral"});
 SN.stage.defineShot("demo_bar",{env:"bar",cast:{naruto:[0,0,0,"sit"]},cam:[1.4,1.5,2.6],look:[0,.9,.2],face:"sad",shiver:1});
-SN.stage.defineShot("demo_funeral",{env:"funeral",cast:{naruto:[-.4,.6,.3,"stand"],sai:[.5,.5,-.3,"stand"]},cam:[0,1.5,3.6],look:[0,1,0],face:"sad"});
+SN.stage.defineShot("demo_funeral",{env:"funeral",hunger:1,cast:{naruto:[-.4,.6,.3,"stand"],sai:[.5,.5,-.3,"stand"]},cam:[0,1.5,3.6],look:[0,1,0],face:"sad"});
 SN.part({
   id:"demo",n:-1,title:"Витрина эффектов",start:"hub",noSave:true,
   nodes:{
