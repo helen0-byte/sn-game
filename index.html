@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Выживи в теле Наруто</title>
+<meta property="og:title" content="Выживи в теле Наруто">
+<meta property="og:description" content="ветвящаяся игра по фанфику S&amp;N · 18+">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Cousine:wght@400;700&family=Rubik+Dirt&family=Rubik+Mono+One&family=Russo+One&display=swap">
+<link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+<div id="app">
+  <div id="stage"><div id="vignette"></div><div id="place"></div></div>
+  <div id="panelWrap"><div class="sheet" id="sheet" aria-live="polite"></div></div>
+</div>
+<!-- three.js r128 лежит в репозитории, чтобы игра не зависела от чужого CDN -->
+<script src="vendor/three/three.min.js"></script>
+<script src="vendor/three/GLTFLoader.js"></script>
+<script src="vendor/three/SkeletonUtils.js"></script>
+<script src="vendor/three/meshopt_decoder.js"></script>
+<script src="js/core/store.js"></script>
+<script src="js/core/state.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/core/models.js"></script>
+<script src="js/core/stage.js"></script>
+<script src="js/core/effects.js"></script>
+<script src="js/core/story.js"></script>
+<script src="js/parts/index.js"></script>
+<script>SN.story.boot()</script>
+</body>
+</html>

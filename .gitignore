@@ -1,0 +1,9 @@
+# несжатые оригиналы моделей сюда не кладём
+models/_src/
+*.orig.glb
+*.blend
+*.blend1
+*.fbx
+node_modules/
+.DS_Store
+Thumbs.db

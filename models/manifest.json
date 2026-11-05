@@ -1,0 +1,35 @@
+{
+  "characters": {
+    "naruto": {
+      "file": "",
+      "height": 1.68,
+      "faceMaterial": "Face",
+      "faces": {}
+    },
+    "sai": {
+      "file": "",
+      "height": 1.74
+    },
+    "kurama": {
+      "file": "",
+      "height": 1.88
+    },
+    "kurama1974": {
+      "file": "",
+      "height": 1.88
+    }
+  },
+  "locations": {
+    "loc_funeral": {
+      "file": "locations/friedhof_celle.glb",
+      "offset": [
+        -12.7,
+        40.55,
+        0.0
+      ],
+      "rotY": 0,
+      "keepPlaceholder": 0,
+      "credit": "«Neuenhäuser Friedhof in Celle» (https://skfb.ly/6FUox), kulturschokolade.org, CC BY 4.0"
+    }
+  }
+}

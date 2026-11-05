@@ -1,0 +1,117 @@
+/* Layout: 3D-сцена сверху (на телефоне) или во весь экран (на компьютере), текст на листке ксерокса, приклеенном скотчем */
+:root{
+  --night:#0f0d12;      /* ночь, фон под сценой */
+  --paper:#ece6da;      /* ксерокс */
+  --ink:#141114;        /* тонер */
+  --hot:#ff3d9a;        /* маркер */
+  --orange:#f08a2c;     /* куртка Джирайи */
+  --tape:rgba(240,232,200,.72);
+  --muted:#8c8590;
+  --f-cut:"Rubik Mono One","Russo One",Impact,sans-serif;
+  --f-type:"Cousine","Courier New",monospace;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+  --f-dirt:"Rubik Dirt","Rubik Mono One",Impact,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--night);color:var(--paper);font-family:var(--f-type);font-size:16px;line-height:1.55;overflow:hidden}
+#app{position:relative;height:100%;display:grid;grid-template-rows:minmax(200px,44%) 1fr}
+#stage{position:relative;min-height:0}
+#stage canvas{display:block;width:100%;height:100%}
+#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%)}
+#place{position:absolute;left:max(16px,env(safe-area-inset-left,0px));top:12px;font-family:var(--f-hand);font-size:22px;color:var(--paper);transform:rotate(-2deg);text-shadow:0 2px 0 #000;pointer-events:none}
+#panelWrap{min-height:0;overflow-y:auto;padding-block:14px 22px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:linear-gradient(#0f0d12,#16131a)}
+.sheet{position:relative;background:var(--paper);color:var(--ink);padding:22px 20px 18px;max-width:640px;margin:0 auto;box-shadow:3px 4px 0 rgba(0,0,0,.6);transform:rotate(-.4deg)}
+.sheet::before,.sheet::after{content:"";position:absolute;top:-10px;width:86px;height:22px;background:var(--tape)}
+.sheet::before{left:18px;transform:rotate(-6deg)}
+.sheet::after{right:22px;transform:rotate(5deg)}
+.sheet p{margin:0 0 12px;max-width:62ch}
+.sheet p.pre{color:#5b5560;font-style:italic}
+.choices{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.opt{all:unset;box-sizing:border-box;display:block;width:100%;cursor:pointer;background:var(--ink);color:var(--paper);font-family:var(--f-type);font-size:15.5px;line-height:1.35;padding:11px 14px 11px 38px;position:relative;transition:transform .12s}
+.opt::before{content:attr(data-k);position:absolute;left:12px;top:11px;font-family:var(--f-cut);font-size:13px;color:var(--hot)}
+.opt:hover{transform:translateX(4px) rotate(-.4deg)}
+.opt:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
+.opt.struck{text-decoration:line-through;text-decoration-color:var(--hot);text-decoration-thickness:3px;color:#9a929e}
+.opt.picked{background:var(--hot);color:var(--ink)}
+.opt.picked::before{color:var(--ink)}
+.opt[disabled]{pointer-events:none}
+.found{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.found li{list-style:none;font-size:15px;padding:8px 10px;border:2px dashed var(--ink);opacity:0;transform:translateY(6px);transition:all .5s}
+.found li.show{opacity:1;transform:none}
+.found li.worst{background:var(--ink);color:var(--paper);border-style:solid}
+.name-echo{font-family:var(--f-hand);font-size:30px;color:var(--hot);min-height:40px;margin:4px 0 0}
+.ransom{display:flex;flex-wrap:wrap;gap:6px 4px;line-height:1;margin:0 0 14px}
+.ransom span{display:inline-block;font-size:clamp(26px,7vw,46px);padding:.08em .14em .02em}
+.r1{font-family:var(--f-cut);background:var(--ink);color:var(--paper);transform:rotate(-3deg)}
+.r2{font-family:var(--f-dirt);background:var(--orange);color:var(--ink);transform:rotate(2deg)}
+.r3{font-family:"Russo One",var(--f-cut);background:var(--paper);color:var(--ink);border:2px solid var(--ink);transform:rotate(-1deg)}
+.r4{font-family:var(--f-cut);background:var(--hot);color:var(--ink);transform:rotate(3deg)}
+.hand{font-family:var(--f-hand);font-size:24px;color:var(--hot);transform:rotate(-2deg);display:inline-block;margin:0 0 10px}
+.warn{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;margin:6px 0 4px}
+.warn b{font-family:var(--f-cut);font-weight:400;background:var(--hot);color:var(--ink);padding:2px 8px;transform:rotate(-4deg);flex:none}
+.tag{display:inline-block;font-family:var(--f-cut);font-size:12px;letter-spacing:.06em;padding:3px 9px 1px;margin:0 0 12px;transform:rotate(-1.5deg)}
+.tag.canon{background:var(--orange);color:var(--ink)}
+.tag.alt{background:var(--ink);color:var(--paper)}
+.endtitle{font-family:var(--f-dirt);font-size:clamp(30px,8vw,52px);line-height:1;margin:0 0 10px;color:var(--ink);text-wrap:balance}
+.help{font-size:13px;border-top:2px solid var(--ink);padding-top:10px;margin-top:14px;color:#3a343c}
+.help .num{font-weight:700;user-select:all}
+.log{margin:14px 0 0;padding:0;display:grid;gap:4px}
+.log li{list-style:none;font-size:14px}
+.log li.got::before{content:"✕ ";color:var(--hot);font-weight:700}
+.log li.no{color:#8a838d}
+.log li.no::before{content:"· ";}
+.savebox{margin-top:14px;padding:10px 12px;border:2px dashed var(--ink)}
+.savebox code{display:block;font-family:var(--f-type);font-size:12px;word-break:break-all;user-select:all;background:var(--ink);color:var(--paper);padding:6px 8px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.ghost{all:unset;cursor:pointer;font-family:var(--f-type);font-weight:700;font-size:14px;border:2px solid var(--ink);padding:9px 14px}
+.ghost:focus-visible{outline:3px solid var(--hot)}
+@media (min-width:900px){
+  #app{grid-template-rows:1fr;grid-template-columns:1fr minmax(380px,460px)}
+  #panelWrap{display:flex;align-items:center;padding-block:40px}
+  .sheet{width:100%}
+}
+@media (prefers-reduced-motion:reduce){.opt,.found li{transition:none}}
+
+/* ===== каркас: новые состояния строк ===== */
+.opt.restrike{animation:restrike .5s ease-out}
+@keyframes restrike{0%{text-decoration-color:transparent}100%{text-decoration-color:var(--hot)}}
+.opt.glow{background:var(--hot);color:var(--ink);box-shadow:0 0 0 3px var(--hot),0 0 22px 4px rgba(255,61,154,.55)}
+.opt.locked{opacity:.45;cursor:default}
+.opt.locked::after{content:"закрыто прошлым выбором";display:block;font-size:12px;margin-top:4px;color:var(--muted)}
+.opt.blur{filter:blur(1.4px);letter-spacing:.06em;transition:filter 1.6s}
+.opt.blur:hover{filter:blur(.6px)}
+
+/* ===== меню частей ===== */
+.parts{display:grid;gap:8px;margin:14px 0 0;padding:0}
+.parts li{list-style:none}
+.parts .opt small{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.parts .opt.soon{opacity:.55;cursor:default}
+.codein{display:flex;gap:8px;margin-top:14px}
+.codein input{flex:1;min-width:0;font-family:var(--f-type);font-size:13px;padding:8px;border:2px solid var(--ink);background:#fff;color:var(--ink)}
+.msg{font-size:13px;margin-top:6px;min-height:1.2em}
+
+/* ===== экраны из визуального языка ===== */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+#fx .layer{position:absolute;inset:0;opacity:0}
+#fx .white{background:#fff}
+#fx .black{background:#000}
+#fx .gray{background:#8d8b8e}
+#fx .crimson{background:radial-gradient(ellipse at center,transparent 0%,transparent 30%,#4a0010 75%,#1a0006 100%);transform:scale(1.8)}
+#fx .amber{background:radial-gradient(ellipse at center,rgba(255,190,90,.12),rgba(170,95,20,.5));mix-blend-mode:screen}
+#fx .cap{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-family:var(--f-hand);font-size:clamp(26px,6vw,40px);color:var(--ink);opacity:0}
+#fx .cap.light{color:var(--paper)}
+/* удушье: всё, кроме щели, закрыто чёрным */
+#fx .slit{position:absolute;inset:0;background:#000;opacity:0}
+body.nocursor,body.nocursor *{cursor:none!important}
+body.locked-input #app{pointer-events:none}
+/* героин: состояние, которое держится несколько экранов */
+body.mood-heroin #stage canvas{filter:sepia(.55) saturate(1.5) hue-rotate(-12deg) brightness(1.08) blur(.6px)}
+body.mood-heroin .sheet{filter:sepia(.35);transition:filter 2s}
+body.mood-heroin .opt{filter:blur(1.2px);transition:filter 2s,transform .6s}
+body.mood-heroin .opt:hover{filter:blur(.4px)}
+body.mood-heroin #panelWrap{animation:drift 7s ease-in-out infinite}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(2px,-3px)}}
+body.mood-gray #stage canvas,body.mood-gray .sheet{filter:grayscale(1) contrast(1.05)}
+body.mood-gray #vignette{background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.7) 100%)}
+@media (prefers-reduced-motion:reduce){body.mood-heroin #panelWrap{animation:none}}
