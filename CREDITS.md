@@ -14,6 +14,7 @@
 - **«Sursaut»**, Rod. Лицензия CC BY-NC-SA 3.0 (https://creativecommons.org/licenses/by-nc-sa/3.0/).
 - **«Ero»** и **«Eterea»**, Sinapsi, альбом «Come Realtà». Лицензия CC BY-NC-SA 3.0 US (https://creativecommons.org/licenses/by-nc-sa/3.0/us/).
 - **«Terra Incognita»**, 1st Contact. Лицензия CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
+- **Ф. Шопен, Вальс № 10 си минор, op. 69 № 2, электронная версия**, Ondrosik. CC0 / общественное достояние (https://creativecommons.org/publicdomain/zero/1.0/).
 - **«Ghost Dance»**, Kevin MacLeod (incompetech.com). Лицензия CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/).
 - **П. И. Чайковский, «Времена года»: «Январь. У камелька», «Март. Песнь жаворонка», «Апрель. Подснежник»**, запись Gregor Quendel (classicals.de). Лицензия CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
 

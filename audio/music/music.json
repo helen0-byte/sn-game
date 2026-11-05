@@ -97,6 +97,14 @@
         "панковская молодость"
       ],
       "loop": true
+    },
+    "chopin_waltz_10": {
+      "file": "chopin_waltz_10.mp3",
+      "mood": [
+        "после расставания",
+        "секунда до дуэли"
+      ],
+      "loop": false
     }
   },
   "pending_license": {
@@ -109,13 +117,6 @@
         "отсутствие"
       ],
       "diegetic": true
-    },
-    "chopin_waltz_10": {
-      "artist": "Ondrosik",
-      "mood": [
-        "после расставания",
-        "секунда до дуэли"
-      ]
     }
   }
 }
