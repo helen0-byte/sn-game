@@ -82,8 +82,31 @@ function hum(on){
 /* файл из sounds/, если когда-нибудь понадобится */
 function file(url,vol){if(!ctx)return;fetch(url).then(r=>r.arrayBuffer()).then(b=>ctx.decodeAudioData(b)).then(buf=>{const s=ctx.createBufferSource();s.buffer=buf;const g=ctx.createGain();g.gain.value=vol==null?1:vol;s.connect(g);g.connect(master);s.start()}).catch(()=>{})}
 
-function stop(name){const l=loops[name];if(!l)return;if(typeof l==="number")clearInterval(l);else l.stop();delete loops[name]}
-function stopAll(){Object.keys(loops).forEach(stop)}
 
-SN.audio={init,muffle,beep,heart,temples,breath,slam,hum,file,stop,stopAll};
+/* музыка из audio/music (список в music.json). Идёт через общий фильтр: muffle глушит и её.
+   music("ero") — кроссфейд на трек; music(null) — плавно в тишину; повтор того же id ничего не делает. */
+const MUSIC_BASE="audio/music/";
+let musicList=null,curMusic=null;
+const musicReady=fetch(MUSIC_BASE+"music.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{tracks:{}}).then(j=>musicList=j).catch(()=>musicList={tracks:{}});
+function music(id,opt){
+  opt=opt||{};const fade=(opt.fade==null?2.5:opt.fade);
+  if(!ctx) return;
+  if(id&&curMusic&&curMusic.id===id) return;
+  if(curMusic){const old=curMusic;curMusic=null;old.g.gain.cancelScheduledValues(now());old.g.gain.setValueAtTime(old.g.gain.value,now());old.g.gain.linearRampToValueAtTime(0,now()+fade);setTimeout(()=>{old.el.pause();old.el.src=""},fade*1000+100)}
+  if(!id) return;
+  musicReady.then(()=>{
+    const t=musicList.tracks&&musicList.tracks[id];if(!t){console.warn("[SN] нет трека",id);return}
+    const el=new Audio(MUSIC_BASE+t.file);el.crossOrigin="anonymous";el.loop=opt.loop!=null?opt.loop:!!t.loop;el.preload="auto";
+    const src=ctx.createMediaElementSource(el),g=ctx.createGain();g.gain.value=0;src.connect(g);g.connect(master);
+    const vol=opt.vol==null?.55:opt.vol;
+    const m={id,el,g};curMusic=m;
+    el.play().then(()=>{g.gain.setValueAtTime(0,now());g.gain.linearRampToValueAtTime(vol,now()+fade)}).catch(e=>console.warn("[SN] музыка не играет",e));
+    el.onended=()=>{if(curMusic===m){curMusic=null;if(opt.then)music(opt.then,opt)}};
+  });
+}
+
+function stop(name){const l=loops[name];if(!l)return;if(typeof l==="number")clearInterval(l);else l.stop();delete loops[name]}
+function stopAll(){Object.keys(loops).forEach(stop);music(null,{fade:.4})}
+
+SN.audio={init,muffle,beep,heart,temples,breath,slam,hum,file,music,stop,stopAll,get music_(){return curMusic&&curMusic.id},get musicList(){return musicList}};
 })();

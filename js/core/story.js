@@ -50,6 +50,7 @@ async function go(id){
   const n=part.nodes[id];if(!n){console.error("[SN] нет экрана",id);return}
   S.node=id;S.hist.push(id);
   if(n.mood!==undefined||SN.fx.mood_) await SN.fx.mood(n.mood||null);
+  if(n.music!==undefined) SN.audio.music(n.music);
   if(n.shot) SN.stage.setShot(n.shot);
   if(n.pose) for(const k in n.pose) SN.stage.setPose(k,n.pose[k]);
   if(n.face) for(const k in n.face) SN.stage.setFace(k,n.face[k]);
@@ -146,6 +147,9 @@ function menu(){
   SN.fx.mood(null);busy=false;
   history.replaceState(null,"",location.pathname+location.search);
   SN.stage.setShot("menu");$("place").textContent="";
+  /* заглавная тема: браузер даст звук только после первого нажатия */
+  const theme=()=>{SN.audio.init();SN.audio.music((SN.audio.musicList&&SN.audio.musicList.theme)||"louis_xiv")};
+  theme();addEventListener("pointerdown",theme,{once:true});
   P=SN.profile.load();
   const all=/[?&]all\b/.test(location.search);
   const items=SN.PARTS.filter(p=>!p.hidden).map(p=>{
