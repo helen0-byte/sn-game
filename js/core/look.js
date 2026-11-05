@@ -43,10 +43,14 @@ const STYLES={
     bands:4,ink:1,inkColor:[.08,.06,.05],edge:[.8,.7,0],
     sat:.55,con:1.1,exp:1.06,lift:[.07,.06,.05],gain:[1.05,.97,.84],
     grain:.13,vig:.7,ca:.25,tone:0,halftone:0,posterize:0,halo:.3,dust:.8,flicker:.12,weave:1.2,dof:5},
-  film_night:{  /* холодная ночная плёнка Нью-Йорка: зелёно-бирюзовые тени, фонари с красным ореолом */
+  film_night:{  /* ночная плёнка Нью-Йорка: зелёно-бирюзовые тени, фонари с красным ореолом. Основа всей игры */
     bands:4,ink:1,inkColor:[.04,.06,.07],edge:[.8,.7,0],
-    sat:.75,con:1.12,exp:1.12,lift:[.02,.09,.1],gain:[.98,1.02,.92],
-    grain:.1,vig:.55,ca:.45,tone:0,halftone:0,posterize:0,halo:1,haloCol:[1,.25,.12],flicker:.03,dof:5},
+    sat:.75,con:1.12,exp:1.04,lift:[.02,.07,.08],gain:[.96,1,.9],
+    grain:.1,vig:.55,ca:.45,tone:0,halftone:0,posterize:0,halo:.7,haloCol:[1,.25,.12],flicker:.03,dof:5,shoulder:1},
+  night_day:{  /* тот же ночной вид для светлых сцен (день, комнаты): ниже яркость, свет не выгорает */
+    bands:4,ink:1,inkColor:[.04,.06,.07],edge:[.8,.7,0],
+    sat:.72,con:1.1,exp:.86,lift:[.02,.06,.07],gain:[.93,.98,.9],
+    grain:.09,vig:.6,ca:.4,tone:0,halftone:0,posterize:0,halo:.35,haloCol:[1,.25,.12],flicker:.02,dof:5,shoulder:1},
   zine:{  /* фанзин/ксерокс: тонер на бумаге и одна краска (оранжевый маркер), как листок с текстом */
     bands:3,ink:1.4,inkColor:[.08,.07,.08],edge:[1,1,.2],
     sat:1,con:1.25,exp:1.1,lift:[0,0,0],gain:[1,1,1],
@@ -55,9 +59,11 @@ const STYLES={
 };
 /* наложения поверх стиля. Числа плавно перетекают за ~1.5 с */
 const MOODS={
-  hunger:{sat:0,con:1.38,exp:.96,lift:[.015,.015,.015],gain:[1,1,1],grain:.15,vig:.85,halo:.15,leak:0,dust:.35,flicker:.09,ca:.2,dof:9,ink:1.1}
+  /* голод: не «немое кино» (никаких царапин и мерцания), а холодная почти бесцветная темнота,
+     зрение сужается, края кадра плывут, виньетка стягивается в такт сердцу */
+  hunger:{sat:.07,con:1.45,exp:.7,lift:[0,.012,.014],gain:[.82,.9,.9],grain:.07,vig:1,halo:0,leak:0,dust:0,flicker:0,weave:0,ca:1.1,dof:12,ink:1.2,pulse:1,tunnel:1}
 };
-let moodByShot=false,cur=null,curName="off",baseName="film_kodak",shotStyle=null,moodName=null,moodK=0,moodFrom=null;
+let moodByShot=false,cur=null,curName="off",baseName="night_day",shotStyle=null,moodName=null,moodK=0,moodFrom=null;
 const dbgMode=+((/[?&]lookdbg=(\d)/.exec(location.search)||[])[1]||0);
 
 /* ---------- 1. материалы ---------- */
@@ -107,7 +113,7 @@ precision highp float;
 varying vec2 vUv;
 uniform sampler2D tColor,tNormal,tDepth;
 uniform vec2 res;uniform float time,near,far;
-uniform float dof,focus,halo,dust,flicker,weave,leak,zgamma,dbg,ink,halftone,grain,vig,ca,sat,con,expo,tone,posterize;
+uniform float pulse,tunnel,shoulder,dof,focus,halo,dust,flicker,weave,leak,zgamma,dbg,ink,halftone,grain,vig,ca,sat,con,expo,tone,posterize;
 uniform vec3 haloCol,leakCol,inkColor,edge,lift,gain,paper,toner,spot;
 float lin(float d){float z=d*2.-1.;return (2.*near*far)/(far+near-z*(far-near));}
 float luma(vec3 c){return dot(c,vec3(.299,.587,.114));}
@@ -124,13 +130,13 @@ void main(){
   if(ca>0.){vec2 o=dc*r2*ca*px*60.;col=vec3(texture2D(tColor,uv+o).r,texture2D(tColor,uv).g,texture2D(tColor,uv-o).b);}
   else col=texture2D(tColor,uv).rgb;
   /* размытие фона: чем дальше точка за героями, тем сильнее плывёт. Сканы без глубины считаются самым дальним фоном */
-  if(dof>0.){
+  if(dof>0.||tunnel>0.){
     float dd=lin(texture2D(tDepth,uv).r);
-    float coc=clamp((dd-focus)/(focus*.9),0.,1.);
+    float coc=max(clamp((dd-focus)/(focus*.9),0.,1.),smoothstep(.06,.3,r2)*tunnel);   /* tunnel: края кадра плывут, как при сужении зрения */
     if(coc>.02){vec3 acc=col;float wsum=1.;
-      for(int i=1;i<20;i++){float fi=float(i);float r=sqrt(fi/19.)*coc*dof;float a=fi*2.39996;
+      for(int i=1;i<20;i++){float fi=float(i);float r=sqrt(fi/19.)*coc*max(dof,6.);float a=fi*2.39996;
         vec2 o=vec2(cos(a),sin(a))*r*px;
-        float sd=lin(texture2D(tDepth,uv+o).r);float w=step(focus*.95,sd);   /* герои спереди не растекаются на фон */
+        float sd=lin(texture2D(tDepth,uv+o).r);float w=max(step(focus*.95,sd),tunnel*smoothstep(.06,.3,r2));   /* герои спереди не растекаются на фон */
         acc+=texture2D(tColor,uv+o).rgb*w;wsum+=w;}
       col=acc/wsum;}
   }
@@ -160,6 +166,7 @@ void main(){
   col*=expo*(1.+(hash(vec2(ft,3.))-.5)*flicker);             /* мерцание лампы проектора */
   col=lift+(gain-lift)*col;                                   /* тени к цвету lift, света к gain */
   col=(col-.5)*con+.5;
+  if(shoulder>0.){vec3 hi=max(col-.62,0.);col=min(col,.62)+.38*(1.-exp(-hi/.38));}   /* светлое не выгорает в белое */
   float L=luma(col);col=mix(vec3(L),col,sat);
   if(posterize>0.) col=floor(col*posterize+.5)/posterize;
   float n=hash(gl_FragCoord.xy+fract(time*7.3)*vec2(91.7,37.3))-.5;
@@ -186,7 +193,8 @@ void main(){
   if(leak>0.){vec2 lp=vec2(1.05,.25+.5*sin(time*.07));float la=leak*smoothstep(.75,0.,distance(vUv*vec2(res.x/res.y,1.),lp*vec2(res.x/res.y,1.)))*(.55+.45*sin(time*.23));
     col=1.-(1.-col)*(1.-leakCol*la);}
   /* виньетка */
-  col*=1.-vig*smoothstep(.15,.75,r2*1.6);
+  float hb=fract(time*.95),thump=exp(-hb*16.)+.7*exp(-max(hb-.2,0.)*16.)*step(.2,hb);   /* стук сердца: два удара */
+  col*=1.-vig*smoothstep(.15-.1*thump*pulse,.75-.12*thump*pulse,r2*1.6);
   /* пыль и царапины */
   if(dust>0.){
     for(int i=0;i<5;i++){vec2 c=vec2(hash(vec2(ft,float(i)+10.)),hash(vec2(ft,float(i)+20.)));
@@ -216,13 +224,13 @@ function ensure(renderer){
     qScene=new THREE.Scene();qCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
     quad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({vertexShader:VERT,fragmentShader:FRAG,depthTest:false,depthWrite:false,
       uniforms:{tColor:{value:null},tNormal:{value:null},tDepth:{value:null},res:{value:new THREE.Vector2()},time:{value:0},near:{value:.1},far:{value:50},
-        dof:{value:0},focus:{value:4},halo:{value:0},dust:{value:0},flicker:{value:0},weave:{value:0},leak:{value:0},haloCol:{value:new THREE.Vector3(1,.35,.15)},leakCol:{value:new THREE.Vector3(1,.45,.15)},zgamma:{value:1},dbg:{value:0},ink:{value:0},halftone:{value:0},grain:{value:0},vig:{value:0},ca:{value:0},sat:{value:1},con:{value:1},expo:{value:1},tone:{value:0},posterize:{value:0},
+        pulse:{value:0},tunnel:{value:0},shoulder:{value:0},dof:{value:0},focus:{value:4},halo:{value:0},dust:{value:0},flicker:{value:0},weave:{value:0},leak:{value:0},haloCol:{value:new THREE.Vector3(1,.35,.15)},leakCol:{value:new THREE.Vector3(1,.45,.15)},zgamma:{value:1},dbg:{value:0},ink:{value:0},halftone:{value:0},grain:{value:0},vig:{value:0},ca:{value:0},sat:{value:1},con:{value:1},expo:{value:1},tone:{value:0},posterize:{value:0},
         inkColor:{value:new THREE.Vector3()},edge:{value:new THREE.Vector3(1,1,1)},lift:{value:new THREE.Vector3()},gain:{value:new THREE.Vector3(1,1,1)},
         paper:{value:new THREE.Vector3(1,1,1)},toner:{value:new THREE.Vector3()},spot:{value:new THREE.Vector3(1,.5,0)}}}));
     quad.frustumCulled=false;qScene.add(quad);
   }
 }
-const NUM=["ink","halftone","grain","vig","ca","sat","con","exp","halo","dust","flicker","weave","leak","dof"],VEC=["lift","gain"];
+const NUM=["pulse","tunnel","shoulder","ink","halftone","grain","vig","ca","sat","con","exp","halo","dust","flicker","weave","leak","dof"],VEC=["lift","gain"];
 let lastT=0;
 function blended(){
   const now=performance.now()/1000,dt=Math.min(.1,now-(lastT||now));lastT=now;
@@ -244,7 +252,7 @@ function pushUniforms(camera){
   u.ink.value=(st.ink||0)*pr;u.halftone.value=(st.halftone||0)*pr;
   ["grain","vig","ca","sat","con","tone","posterize"].forEach(k=>u[k].value=st[k]!=null?st[k]:u[k].value);
   u.expo.value=st.exp||1;u.dbg.value=dbgMode;u.zgamma.value=st.zgamma||1;
-  ["halo","dust","flicker","weave","leak","dof"].forEach(k=>u[k].value=st[k]||0);
+  ["halo","dust","flicker","weave","leak","dof","pulse","tunnel","shoulder"].forEach(k=>u[k].value=st[k]||0);
   u.haloCol.value.fromArray(st.haloCol||[1,.35,.15]);u.leakCol.value.fromArray(st.leakCol||[1,.45,.15]);
   u.inkColor.value.fromArray(st.inkColor||[0,0,0]);u.edge.value.fromArray(st.edge||[1,1,1]);
   u.lift.value.fromArray(st.lift||[0,0,0]);u.gain.value.fromArray(st.gain||[1,1,1]);
