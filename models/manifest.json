@@ -3,38 +3,16 @@
     "naruto": {
       "file": "characters/naruto.glb",
       "height": 1.68,
-      "bones": {
-        "hips": "Hips",
-        "spine": "Spine02",
-        "neck": "neck",
-        "thL": "LeftUpLeg",
-        "thR": "RightUpLeg",
-        "knL": "LeftLeg",
-        "knR": "RightLeg",
-        "shL": "LeftArm",
-        "shR": "RightArm",
-        "elL": "LeftForeArm",
-        "elR": "RightForeArm"
+      "source": "Meshy (rig + Mixamo Walking/Running), Барабулка 05.11.2026; оригинал Meshy_AI_anime_boy_rigged_20261105_animated_mixamo_All_animation.glb в Загрузках",
+      "clips": {
+        "walk": "Walking",
+        "k_hold": "Walking",
+        "run": "Running"
       },
-      "source": "Meshy, сгенерировано Барабулкой 05.11.2026; оригинал anime-boy-rigged.glb у неё в Загрузках",
-      "axes": {
-        "thL": [
-          "x",
-          1
-        ],
-        "thR": [
-          "x",
-          1
-        ],
-        "knL": [
-          "x",
-          1
-        ],
-        "knR": [
-          "x",
-          1
-        ]
-      }
+      "armDown": [
+        "y",
+        1.0
+      ]
     },
     "sai": {
       "file": "",

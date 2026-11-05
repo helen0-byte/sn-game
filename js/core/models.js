@@ -109,12 +109,16 @@ function setFace(R,name){
 }
 
 /* без клипа: углы поз заглушки поворачивают кости модели */
-const _q=new THREE.Quaternion(),_ax={x:new THREE.Vector3(1,0,0),y:new THREE.Vector3(0,1,0),z:new THREE.Vector3(0,0,1)};
+const _q=new THREE.Quaternion(),_q2=new THREE.Quaternion(),_ax={x:new THREE.Vector3(1,0,0),y:new THREE.Vector3(0,1,0),z:new THREE.Vector3(0,0,1)};
 function driveBones(R,v){
   if(R.action) return;
   if(R.glb) R.glb.position.y=R.glbY+(v.y-.95);
   const B=R.bones,A=R.axes,rest=R.rest;
-  const set=(k,ang)=>{if(!B[k])return;const [ax,sg]=A[k]||["x",1];B[k].quaternion.copy(rest[k]).multiply(_q.setFromAxisAngle(_ax[ax],ang*sg))};
+  /* armDown: [ось, угол] — опустить руки из A/T-позы модели в «руки вдоль тела» заглушки */
+  const ad=(R.entry&&R.entry.armDown)||null;
+  const set=(k,ang)=>{if(!B[k])return;const [ax,sg]=A[k]||["x",1];B[k].quaternion.copy(rest[k]);
+    B[k].quaternion.multiply(_q.setFromAxisAngle(_ax[ax],ang*sg));
+    if(ad&&(k==="shL"||k==="shR"))B[k].quaternion.multiply(_q2.setFromAxisAngle(_ax[ad[0]],ad[1]*(k==="shL"?1:-1)))};
   set("spine",v.sp);set("neck",v.nx);set("thL",v.thL);set("thR",v.thR);set("knL",v.knL);set("knR",v.knR);
   set("shL",v.shLx);set("shR",v.shRx);set("elL",v.elL);set("elR",v.elR);
 }
