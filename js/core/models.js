@@ -17,8 +17,20 @@ function loader(){
   if(window.MeshoptDecoder) L.setMeshoptDecoder(window.MeshoptDecoder);
   return L;
 }
+/* сжатые модели хранят координаты целыми числами (normalized Int16). Видеокарта их понимает,
+   а three r128 при подсчёте рамок, лучах и позе костей — нет. Переводим координаты обратно в обычные числа один раз при загрузке */
+function dequantize(root){
+  root.traverse(o=>{
+    const a=o.isMesh&&o.geometry&&o.geometry.attributes.position;if(!a||!a.normalized) return;
+    const src=a.array,k=src instanceof Int8Array?127:src instanceof Uint8Array?255:src instanceof Int16Array?32767:src instanceof Uint16Array?65535:1;
+    const isInt=src instanceof Int8Array||src instanceof Int16Array,f=new Float32Array(a.count*3);
+    for(let i=0;i<a.count;i++)for(let j=0;j<3;j++){const v=a.isInterleavedBufferAttribute?a.data.array[i*a.data.stride+a.offset+j]:src[i*a.itemSize+j];f[i*3+j]=isInt?Math.max(v/k,-1):v/k}
+    o.geometry.setAttribute("position",new THREE.BufferAttribute(f,3));
+    o.geometry.computeBoundingBox();o.geometry.computeBoundingSphere();
+  });
+}
 function loadGLTF(file){
-  if(!cache[file]) cache[file]=new Promise((res,rej)=>loader().load(BASE+file,res,undefined,rej));
+  if(!cache[file]) cache[file]=new Promise((res,rej)=>loader().load(BASE+file,g=>{dequantize(g.scene);res(g)},undefined,rej));
   return cache[file];
 }
 
@@ -44,6 +56,35 @@ function normalize(obj,entry){
   obj.traverse(o=>{if(o.isMesh)o.frustumCulled=false});
 }
 
+/* где на самом деле подошвы: считаем кожу модели в позе «стоит» прямо на процессоре.
+   Кость стопы выше подошвы на толщину ботинка, поэтому по костям ноги уходили в пол.
+   Веса костей в сжатых моделях тоже целые числа (0..255), их делим сами. */
+function soleY(model,gltf,entry){
+  const spec=entry.clips&&(entry.clips.stand||entry.clips.idle);const name=spec&&(spec.clip||spec);
+  const clip=name&&gltf.animations&&gltf.animations.find(a=>a.name===name);
+  let mixer=null;
+  if(clip){mixer=new THREE.AnimationMixer(model);mixer.clipAction(clip).play();mixer.update(0)}
+  model.updateMatrixWorld(true);
+  const ys=[],p=new THREE.Vector3(),t=new THREE.Vector3(),acc=new THREE.Vector3(),m=new THREE.Matrix4();
+  model.traverse(o=>{
+    if(!o.isSkinnedMesh) return;
+    o.skeleton.update();
+    const P=o.geometry.attributes.position,SI=o.geometry.attributes.skinIndex,SW=o.geometry.attributes.skinWeight;
+    const wk=SW.normalized?(SW.array instanceof Uint8Array?255:SW.array instanceof Uint16Array?65535:1):1;
+    const bm=o.skeleton.boneMatrices,step=Math.max(1,Math.floor(P.count/6000));
+    for(let i=0;i<P.count;i+=step){
+      p.fromBufferAttribute(P,i).applyMatrix4(o.bindMatrix);acc.set(0,0,0);let ws=0;
+      for(let j=0;j<4;j++){const w=SW.getComponent?SW.getComponent(i,j)/wk:[SW.getX(i),SW.getY(i),SW.getZ(i),SW.getW(i)][j]/wk;if(!w)continue;
+        const bi=[SI.getX(i),SI.getY(i),SI.getZ(i),SI.getW(i)][j];m.fromArray(bm,bi*16);t.copy(p).applyMatrix4(m);acc.addScaledVector(t,w);ws+=w}
+      if(ws<.5) continue;
+      acc.divideScalar(ws).applyMatrix4(o.bindMatrixInverse).applyMatrix4(o.matrixWorld);ys.push(acc.y);
+    }
+  });
+  if(mixer){mixer.stopAllAction();mixer.uncacheRoot(model)}
+  if(!ys.length) return null;
+  ys.sort((a,b)=>a-b);return ys[Math.floor(ys.length*.002)];   /* не самая нижняя точка: одна кривая вершина не должна поднимать всю фигуру */
+}
+
 function attach(R,id,opt){
   opt=opt||{};
   ready.then(()=>{
@@ -52,6 +93,7 @@ function attach(R,id,opt){
     return loadGLTF(entry.file).then(gltf=>{
       const model=THREE.SkeletonUtils?THREE.SkeletonUtils.clone(gltf.scene):gltf.scene.clone(true);
       normalize(model,entry);
+      if(entry.footY==null){const y=soleY(model,gltf,entry);if(y!=null&&Math.abs(y)<.3)model.position.y-=y}
       model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(opt.ghost){o.material=opt.ghost;o.castShadow=false}}});
       if(SN.look){if(opt.ghost)SN.look.noEdges(model);else SN.look.adopt(model)}
       /* заглушку прячем, но её группы остаются: на них держатся позы и микродвижения */

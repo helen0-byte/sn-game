@@ -29,10 +29,30 @@ const STYLES={
     bands:3,ink:1.6,inkColor:[.06,.04,.06],edge:[1,1,.15],
     sat:1.18,con:1.12,exp:1.05,lift:[.02,.01,.03],gain:[1,.98,.95],
     grain:.035,vig:.35,ca:0,tone:0,halftone:5,posterize:0},
-  film:{  /* плёнка 70-х: тонкий контур, выцветшие чёрные, тёплый свет, холодные тени, сильное зерно */
+  film:{  /* плёнка 70-х: тонкий контур, выцветшие чёрные, тёплый свет, холодные тени, сильное зерно, лёгкий ореол вокруг света */
     bands:4,ink:1,inkColor:[.07,.05,.07],edge:[.8,.7,0],
     sat:.82,con:1.04,exp:1.08,lift:[.05,.06,.08],gain:[1.06,.98,.86],
-    grain:.08,vig:.5,ca:.35,tone:0,halftone:0,posterize:0},
+    grain:.08,vig:.5,ca:.35,tone:0,halftone:0,posterize:0,halo:.35},
+  film_kodak:{  /* тёплая любительская плёнка: сильный ореол, засветы с края, мягкий жёлто-розовый свет */
+    bands:4,ink:.9,inkColor:[.09,.05,.06],edge:[.8,.7,0],
+    sat:.9,con:1.02,exp:1.1,lift:[.08,.06,.07],gain:[1.08,.97,.82],
+    grain:.07,vig:.45,ca:.4,tone:0,halftone:0,posterize:0,halo:.6,leak:.9,leakCol:[1,.38,.12],flicker:.05},
+  film_16mm:{  /* затёртая 16 мм из проектора: пыль, царапины, мерцание, кадр подрагивает, цвет уходит в сепию */
+    bands:4,ink:1,inkColor:[.08,.06,.05],edge:[.8,.7,0],
+    sat:.55,con:1.1,exp:1.06,lift:[.07,.06,.05],gain:[1.05,.97,.84],
+    grain:.13,vig:.7,ca:.25,tone:0,halftone:0,posterize:0,halo:.3,dust:.8,flicker:.12,weave:1.2},
+  film_night:{  /* холодная ночная плёнка Нью-Йорка: зелёно-бирюзовые тени, фонари с красным ореолом */
+    bands:4,ink:1,inkColor:[.04,.06,.07],edge:[.8,.7,0],
+    sat:.75,con:1.12,exp:1.12,lift:[.02,.09,.1],gain:[.98,1.02,.92],
+    grain:.1,vig:.55,ca:.45,tone:0,halftone:0,posterize:0,halo:1,haloCol:[1,.25,.12],flicker:.03},
+  punk:{  /* панк-плакат: розовая краска, чёрный растр, бумага, приводка сбита (как афиши Round House) */
+    bands:3,ink:1.4,inkColor:[.06,.05,.06],edge:[1,1,.2],
+    sat:1,con:1.2,exp:1.1,grain:.05,vig:.15,ca:0,tone:2,halftone:5,posterize:0,zgamma:.6,
+    paper:[.93,.91,.86],toner:[.07,.06,.07],spot:[1,.24,.6]},
+  punk_flag:{  /* панк-плакат «флаг»: тёплое красной краской, холодное синей, остальное чёрный растр на бумаге */
+    bands:3,ink:1.4,inkColor:[.06,.05,.06],edge:[1,1,.2],
+    sat:1.3,con:1.15,exp:1.1,grain:.05,vig:.15,ca:0,tone:2,halftone:5,posterize:-1,zgamma:.6,
+    paper:[.92,.9,.86],toner:[.07,.06,.07],spot:[.86,.12,.2],spot2:[.12,.2,.55]},
   zine:{  /* фанзин/ксерокс: тонер на бумаге и одна краска (оранжевый маркер), как листок с текстом */
     bands:3,ink:1.4,inkColor:[.08,.07,.08],edge:[1,1,.2],
     sat:1,con:1.25,exp:1.1,lift:[0,0,0],gain:[1,1,1],
@@ -89,8 +109,8 @@ precision highp float;
 varying vec2 vUv;
 uniform sampler2D tColor,tNormal,tDepth;
 uniform vec2 res;uniform float time,near,far;
-uniform float zgamma,dbg,ink,halftone,grain,vig,ca,sat,con,expo,tone,posterize;
-uniform vec3 inkColor,edge,lift,gain,paper,toner,spot;
+uniform float halo,dust,flicker,weave,leak,zgamma,dbg,ink,halftone,grain,vig,ca,sat,con,expo,tone,posterize;
+uniform vec3 spot2,haloCol,leakCol,inkColor,edge,lift,gain,paper,toner,spot;
 float lin(float d){float z=d*2.-1.;return (2.*near*far)/(far+near-z*(far-near));}
 float luma(vec3 c){return dot(c,vec3(.299,.587,.114));}
 float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
@@ -98,10 +118,18 @@ vec3 rgb2hsv(vec3 c){vec4 K=vec4(0.,-1./3.,2./3.,-1.);vec4 p=mix(vec4(c.bg,K.wz)
 void main(){
   vec2 px=1./res;
   /* расслоение цвета к краям кадра */
+  /* плёнка идёт кадрами ~18 в секунду: пыль, мерцание и дрожание меняются по кадрам, а не плавно */
+  float ft=floor(time*18.);
+  vec2 uv=vUv+(vec2(hash(vec2(ft,1.)),hash(vec2(ft,2.)))-.5)*weave*px*3.;   /* дрожание кадра в проекторе */
   vec2 dc=(vUv-.5);float r2=dot(dc,dc);
   vec3 col;
-  if(ca>0.){vec2 o=dc*r2*ca*px*60.;col=vec3(texture2D(tColor,vUv+o).r,texture2D(tColor,vUv).g,texture2D(tColor,vUv-o).b);}
-  else col=texture2D(tColor,vUv).rgb;
+  if(ca>0.){vec2 o=dc*r2*ca*px*60.;col=vec3(texture2D(tColor,uv+o).r,texture2D(tColor,uv).g,texture2D(tColor,uv-o).b);}
+  else col=texture2D(tColor,uv).rgb;
+  /* ореол (halation): яркие места светятся красно-оранжевым, как свет, отражённый от подложки плёнки */
+  if(halo>0.){vec3 h=vec3(0.);
+    for(int i=0;i<12;i++){float a=float(i)*.5236;vec2 o=vec2(cos(a),sin(a))*px*(i<6?7.:15.);
+      vec3 c=texture2D(tColor,uv+o).rgb;h+=c*smoothstep(.75,1.,luma(c));}
+    col+=haloCol*h/12.*halo;}
   /* контур: перепады глубины, нормалей и цвета вокруг точки */
   float e=0.;
   if(ink>0.){
@@ -120,13 +148,31 @@ void main(){
     e=max(max(smoothstep(.08,.22,dd*edge.x),smoothstep(.9,1.6,nn*edge.y)),smoothstep(.35,.7,ll*edge.z))*fade;
   }
   /* цвет */
-  col*=expo;
+  col*=expo*(1.+(hash(vec2(ft,3.))-.5)*flicker);             /* мерцание лампы проектора */
   col=lift+(gain-lift)*col;                                   /* тени к цвету lift, света к gain */
   col=(col-.5)*con+.5;
   float L=luma(col);col=mix(vec3(L),col,sat);
   if(posterize>0.) col=floor(col*posterize+.5)/posterize;
   float n=hash(gl_FragCoord.xy+fract(time*7.3)*vec2(91.7,37.3))-.5;
-  if(tone>.5){
+  if(tone>1.5){
+    /* панк-плакат (шелкография): бумага, одна-две плоские краски и чёрный растр, напечатанный чуть мимо */
+    vec3 hsv=rgb2hsv(clamp(col,0.,1.));
+    float lv=clamp(pow(clamp(L,0.,1.),zgamma)+n*grain*1.5,0.,1.);
+    vec3 cr=texture2D(tColor,uv+vec2(2.,-1.5)*px*(res.x/max(res.x,1.))).rgb;   /* чёрный слой сдвинут: сбитая приводка */
+    float lk=clamp(pow(clamp(luma(cr*expo),0.,1.),zgamma),0.,1.);
+    float a=.785,cs=cos(a),sn=sin(a);vec2 g=mat2(cs,-sn,sn,cs)*gl_FragCoord.xy;   /* растр под 45°, как в типографии */
+    float h=length(fract(g/max(halftone,2.))-.5)*1.41;
+    float kb=max(step(h,smoothstep(.62,.08,lk)),step(lk,.12));
+    float spotOn;vec3 sc=spot;
+    if(posterize<0.){                                           /* «флаг»: тёплое — красной, холодное — синей */
+      float warmH=1.-smoothstep(.06,.14,abs(fract(hsv.x+.5)-.5-0.)*1.);
+      float wr=smoothstep(.25,.45,hsv.y)*max(1.-smoothstep(.0,.1,min(hsv.x,1.-hsv.x)),1.-smoothstep(.04,.1,abs(hsv.x-.08)));
+      float cb=smoothstep(.2,.4,hsv.y)*(1.-smoothstep(.08,.16,abs(hsv.x-.6)));
+      spotOn=max(wr,cb);sc=wr>=cb?spot:spot2;
+    }else spotOn=smoothstep(.9,.55,lv);                         /* одна краска: всё, что не светлое, заливается ей */
+    vec3 c=mix(paper,sc,step(.5,spotOn));
+    col=mix(c,toner,kb);
+  }else if(tone>.5){
     /* ксерокс: яркость в тонер/бумагу через растр, тёплые насыщенные места — краской */
     vec3 hsv=rgb2hsv(clamp(col,0.,1.));
     float hd=abs(fract(hsv.x-.07+.5)-.5);                     /* насколько оттенок близок к оранжевому */
@@ -145,8 +191,21 @@ void main(){
     }
     col+=n*grain;
   }
+  /* засвет: тёплое пятно медленно ползёт от края, как свет, попавший в кассету */
+  if(leak>0.){vec2 lp=vec2(1.05,.25+.5*sin(time*.07));float la=leak*smoothstep(.75,0.,distance(vUv*vec2(res.x/res.y,1.),lp*vec2(res.x/res.y,1.)))*(.55+.45*sin(time*.23));
+    col=1.-(1.-col)*(1.-leakCol*la);}
   /* виньетка */
   col*=1.-vig*smoothstep(.15,.75,r2*1.6);
+  /* пыль и царапины */
+  if(dust>0.){
+    for(int i=0;i<5;i++){vec2 c=vec2(hash(vec2(ft,float(i)+10.)),hash(vec2(ft,float(i)+20.)));
+      float on=step(hash(vec2(ft,float(i)+30.)),dust);float rr=(1.5+hash(vec2(ft,float(i)+40.))*4.)*px.y;
+      vec2 d=(vUv-c)*vec2(res.x/res.y,1.);float sp=on*(1.-smoothstep(rr*.5,rr,length(d)+(hash(gl_FragCoord.xy)-.5)*rr*.6));
+      col=mix(col,i<3?vec3(.04):vec3(.92,.9,.85),sp*.85);}
+    float sx=hash(vec2(floor(time*1.3),7.));                   /* длинная царапина держится несколько кадров */
+    float sc=step(hash(vec2(floor(time*1.3),8.)),dust*.6)*(1.-smoothstep(.0,px.x*1.2,abs(vUv.x-sx-sin(vUv.y*9.+sx*20.)*.002)));
+    col=mix(col,vec3(.85,.83,.78),sc*.5);
+  }
   col=mix(col,inkColor,e);
   if(dbg>.5){gl_FragColor=dbg<1.5?vec4(texture2D(tNormal,vUv).rgb,1.):vec4(vec3(lin(texture2D(tDepth,vUv).r)/20.),1.);return;}
   gl_FragColor=vec4(clamp(col,0.,1.),1.);
@@ -166,9 +225,9 @@ function ensure(renderer){
     qScene=new THREE.Scene();qCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
     quad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({vertexShader:VERT,fragmentShader:FRAG,depthTest:false,depthWrite:false,
       uniforms:{tColor:{value:null},tNormal:{value:null},tDepth:{value:null},res:{value:new THREE.Vector2()},time:{value:0},near:{value:.1},far:{value:50},
-        zgamma:{value:1},dbg:{value:0},ink:{value:0},halftone:{value:0},grain:{value:0},vig:{value:0},ca:{value:0},sat:{value:1},con:{value:1},expo:{value:1},tone:{value:0},posterize:{value:0},
+        halo:{value:0},dust:{value:0},flicker:{value:0},weave:{value:0},leak:{value:0},haloCol:{value:new THREE.Vector3(1,.35,.15)},leakCol:{value:new THREE.Vector3(1,.45,.15)},zgamma:{value:1},dbg:{value:0},ink:{value:0},halftone:{value:0},grain:{value:0},vig:{value:0},ca:{value:0},sat:{value:1},con:{value:1},expo:{value:1},tone:{value:0},posterize:{value:0},
         inkColor:{value:new THREE.Vector3()},edge:{value:new THREE.Vector3(1,1,1)},lift:{value:new THREE.Vector3()},gain:{value:new THREE.Vector3(1,1,1)},
-        paper:{value:new THREE.Vector3(1,1,1)},toner:{value:new THREE.Vector3()},spot:{value:new THREE.Vector3(1,.5,0)}}}));
+        paper:{value:new THREE.Vector3(1,1,1)},toner:{value:new THREE.Vector3()},spot:{value:new THREE.Vector3(1,.5,0)},spot2:{value:new THREE.Vector3(.1,.2,.6)}}}));
     quad.frustumCulled=false;qScene.add(quad);
   }
 }
@@ -182,9 +241,11 @@ function pushUniforms(camera){
   u.ink.value=(st.ink||0)*pr;u.halftone.value=(st.halftone||0)*pr;
   ["grain","vig","ca","sat","con","tone","posterize"].forEach(k=>u[k].value=st[k]!=null?st[k]:u[k].value);
   u.expo.value=st.exp||1;u.dbg.value=dbgMode;u.zgamma.value=st.zgamma||1;
+  ["halo","dust","flicker","weave","leak"].forEach(k=>u[k].value=st[k]||0);
+  u.haloCol.value.fromArray(st.haloCol||[1,.35,.15]);u.leakCol.value.fromArray(st.leakCol||[1,.45,.15]);
   u.inkColor.value.fromArray(st.inkColor||[0,0,0]);u.edge.value.fromArray(st.edge||[1,1,1]);
   u.lift.value.fromArray(st.lift||[0,0,0]);u.gain.value.fromArray(st.gain||[1,1,1]);
-  if(st.paper)u.paper.value.fromArray(st.paper);if(st.toner)u.toner.value.fromArray(st.toner);if(st.spot)u.spot.value.fromArray(st.spot);
+  if(st.paper)u.paper.value.fromArray(st.paper);if(st.toner)u.toner.value.fromArray(st.toner);if(st.spot)u.spot.value.fromArray(st.spot);if(st.spot2)u.spot2.value.fromArray(st.spot2);
 }
 
 /* stage.js зовёт это вместо renderer.render; false — значит фильтр выключен, рисуй как обычно */
