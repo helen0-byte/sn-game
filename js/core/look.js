@@ -36,7 +36,7 @@ const STYLES={
   zine:{  /* фанзин/ксерокс: тонер на бумаге и одна краска (оранжевый маркер), как листок с текстом */
     bands:3,ink:1.4,inkColor:[.08,.07,.08],edge:[1,1,.2],
     sat:1,con:1.25,exp:1.1,lift:[0,0,0],gain:[1,1,1],
-    grain:.06,vig:.25,ca:0,tone:1,halftone:4,posterize:0,
+    grain:.06,vig:.25,ca:0,tone:1,halftone:4,posterize:0,zgamma:.55,
     paper:[.925,.9,.855],toner:[.08,.067,.078],spot:[.94,.54,.17]},
 };
 let cur=null,curName="off";
@@ -89,7 +89,7 @@ precision highp float;
 varying vec2 vUv;
 uniform sampler2D tColor,tNormal,tDepth;
 uniform vec2 res;uniform float time,near,far;
-uniform float dbg,ink,halftone,grain,vig,ca,sat,con,expo,tone,posterize;
+uniform float zgamma,dbg,ink,halftone,grain,vig,ca,sat,con,expo,tone,posterize;
 uniform vec3 inkColor,edge,lift,gain,paper,toner,spot;
 float lin(float d){float z=d*2.-1.;return (2.*near*far)/(far+near-z*(far-near));}
 float luma(vec3 c){return dot(c,vec3(.299,.587,.114));}
@@ -132,7 +132,7 @@ void main(){
     float hd=abs(fract(hsv.x-.07+.5)-.5);                     /* насколько оттенок близок к оранжевому */
     float warm=smoothstep(.45,.65,hsv.y)*(1.-smoothstep(.05,.11,hd))*smoothstep(.25,.45,hsv.z);
     float h=halftone>0.?length(fract(gl_FragCoord.xy/halftone)-.5)*1.25:.5;
-    float lv=clamp((L-.5)*con+.5+n*grain*2.,0.,1.);
+    float lv=clamp(pow(clamp(L,0.,1.),zgamma)+n*grain*2.,0.,1.);   /* zgamma<1 вытягивает ночь из черноты */
     float ink3=step(h,1.-lv);                                  /* точка растра: тонер */
     vec3 base=mix(paper,toner,ink3*smoothstep(.0,.9,1.-lv));
     base=mix(base,toner,smoothstep(.22,.08,lv));               /* глубокие тени сплошным тонером */
@@ -166,7 +166,7 @@ function ensure(renderer){
     qScene=new THREE.Scene();qCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
     quad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({vertexShader:VERT,fragmentShader:FRAG,depthTest:false,depthWrite:false,
       uniforms:{tColor:{value:null},tNormal:{value:null},tDepth:{value:null},res:{value:new THREE.Vector2()},time:{value:0},near:{value:.1},far:{value:50},
-        dbg:{value:0},ink:{value:0},halftone:{value:0},grain:{value:0},vig:{value:0},ca:{value:0},sat:{value:1},con:{value:1},expo:{value:1},tone:{value:0},posterize:{value:0},
+        zgamma:{value:1},dbg:{value:0},ink:{value:0},halftone:{value:0},grain:{value:0},vig:{value:0},ca:{value:0},sat:{value:1},con:{value:1},expo:{value:1},tone:{value:0},posterize:{value:0},
         inkColor:{value:new THREE.Vector3()},edge:{value:new THREE.Vector3(1,1,1)},lift:{value:new THREE.Vector3()},gain:{value:new THREE.Vector3(1,1,1)},
         paper:{value:new THREE.Vector3(1,1,1)},toner:{value:new THREE.Vector3()},spot:{value:new THREE.Vector3(1,.5,0)}}}));
     quad.frustumCulled=false;qScene.add(quad);
@@ -181,7 +181,7 @@ function pushUniforms(camera){
   const pr=W/Math.max(1,(SN.stage&&SN.stage.canvas&&SN.stage.canvas.clientWidth)||W);
   u.ink.value=(st.ink||0)*pr;u.halftone.value=(st.halftone||0)*pr;
   ["grain","vig","ca","sat","con","tone","posterize"].forEach(k=>u[k].value=st[k]!=null?st[k]:u[k].value);
-  u.expo.value=st.exp||1;u.dbg.value=dbgMode;
+  u.expo.value=st.exp||1;u.dbg.value=dbgMode;u.zgamma.value=st.zgamma||1;
   u.inkColor.value.fromArray(st.inkColor||[0,0,0]);u.edge.value.fromArray(st.edge||[1,1,1]);
   u.lift.value.fromArray(st.lift||[0,0,0]);u.gain.value.fromArray(st.gain||[1,1,1]);
   if(st.paper)u.paper.value.fromArray(st.paper);if(st.toner)u.toner.value.fromArray(st.toner);if(st.spot)u.spot.value.fromArray(st.spot);
