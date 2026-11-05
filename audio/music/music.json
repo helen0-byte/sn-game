@@ -2,19 +2,151 @@
   "_": "Музыка игры. Подробности и лицензии: docs/МУЗЫКА.md. mood: со слов Барабулки.",
   "theme": "louis_xiv",
   "tracks": {
-    "louis_xiv":          {"file": "louis_xiv.mp3",          "mood": ["главная тема", "саморазрушающаяся любовь", "погоня", "вокзал"], "loop": false},
-    "sursaut":            {"file": "sursaut.mp3",            "mood": ["ярость", "разрушение", "тяга к смерти"], "loop": true},
-    "ghost_dance":        {"file": "ghost_dance.mp3",        "mood": ["ложь", "интриги", "подозрение", "сознательно плохое"], "loop": true},
-    "seasons_01_january": {"file": "seasons_01_january.mp3", "mood": ["уют", "дом", "друзья", "тёплые летние ночи"], "loop": true},
-    "seasons_03_march":   {"file": "seasons_03_march.mp3",   "mood": ["вина", "ошибки", "рефлексия", "меланхолия"], "loop": true},
-    "seasons_04_april":   {"file": "seasons_04_april.mp3",   "mood": ["ссора", "страсть", "вальс набирает обороты"], "loop": false},
-    "bellwether":         {"file": "bellwether.mp3",         "mood": ["повседневность", "меланхолия", "близкие", "надежда"], "loop": false},
-    "ero":                {"file": "ero.mp3",                "mood": ["одиночество", "пустота", "снег", "пустая улица"], "loop": true},
-    "eterea":             {"file": "eterea.mp3",             "mood": ["нежность", "объятия", "поцелуй", "тепло"], "loop": true}
+    "louis_xiv": {
+      "file": "louis_xiv.mp3",
+      "mood": [
+        "главная тема",
+        "саморазрушающаяся любовь",
+        "погоня",
+        "вокзал"
+      ],
+      "loop": false
+    },
+    "sursaut": {
+      "file": "sursaut.mp3",
+      "mood": [
+        "ярость",
+        "разрушение",
+        "тяга к смерти"
+      ],
+      "loop": true
+    },
+    "ghost_dance": {
+      "file": "ghost_dance.mp3",
+      "mood": [
+        "ложь",
+        "интриги",
+        "подозрение",
+        "сознательно плохое"
+      ],
+      "loop": true
+    },
+    "seasons_01_january": {
+      "file": "seasons_01_january.mp3",
+      "mood": [
+        "уют",
+        "дом",
+        "друзья",
+        "тёплые летние ночи"
+      ],
+      "loop": true
+    },
+    "seasons_03_march": {
+      "file": "seasons_03_march.mp3",
+      "mood": [
+        "вина",
+        "ошибки",
+        "рефлексия",
+        "меланхолия"
+      ],
+      "loop": true
+    },
+    "seasons_04_april": {
+      "file": "seasons_04_april.mp3",
+      "mood": [
+        "ссора",
+        "страсть",
+        "вальс набирает обороты"
+      ],
+      "loop": false
+    },
+    "bellwether": {
+      "file": "bellwether.mp3",
+      "mood": [
+        "повседневность",
+        "меланхолия",
+        "близкие",
+        "надежда"
+      ],
+      "loop": false
+    },
+    "ero": {
+      "file": "ero.mp3",
+      "mood": [
+        "одиночество",
+        "пустота",
+        "снег",
+        "пустая улица"
+      ],
+      "loop": true
+    },
+    "eterea": {
+      "file": "eterea.mp3",
+      "mood": [
+        "нежность",
+        "объятия",
+        "поцелуй",
+        "тепло"
+      ],
+      "loop": true
+    },
+    "terra_incognita": {
+      "file": "terra_incognita.mp3",
+      "mood": [
+        "драйв",
+        "панковская молодость"
+      ],
+      "loop": true
+    },
+    "chopin_waltz_10": {
+      "file": "chopin_waltz_10.mp3",
+      "mood": [
+        "после расставания",
+        "секунда до дуэли"
+      ],
+      "loop": false
+    },
+    "life_sucks": {
+      "file": "life_sucks.mp3",
+      "mood": [
+        "срыв",
+        "забить на всё",
+        "загул",
+        "пьянка"
+      ],
+      "loop": true
+    },
+    "godzilla": {
+      "file": "godzilla.mp3",
+      "mood": [
+        "схождение с ума",
+        "труп"
+      ],
+      "loop": true
+    },
+    "komodo_dragon": {
+      "file": "komodo_dragon.mp3",
+      "mood": [
+        "подвальный панк",
+        "концерт",
+        "злость",
+        "ревность",
+        "отсутствие"
+      ],
+      "loop": false,
+      "diegetic": true
+    },
+    "cast": {
+      "file": "cast.mp3",
+      "mood": [
+        "тема Сая",
+        "гитара",
+        "Сай играет для Наруто"
+      ],
+      "loop": true
+    }
   },
-  "pending_license": {
-    "terra_incognita": {"artist": "1st Contact", "mood": ["драйв", "панковская молодость"]},
-    "cage":            {"artist": "Matte Black", "mood": ["подвальный панк", "злость", "ревность", "отсутствие"], "diegetic": true},
-    "chopin_waltz_10": {"artist": "Ondrosik",    "mood": ["после расставания", "секунда до дуэли"]}
+  "character_themes": {
+    "sai": "cast"
   }
 }
