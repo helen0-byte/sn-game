@@ -109,6 +109,7 @@ async function ending(key){
   /* смертельная концовка только если не пришла ни одна нить */
   if(E.death&&SN.state.anyThread(S)){key=E.fallback;E=part.endings[key]}
   await SN.fx.mood(E.mood||null);
+  if(E.music!==undefined) SN.audio.music(E.music);
   const loops=P.loops[part.id]=(P.loops[part.id]|0)+(E.canon?1:0);
   if(E.loopTo&&loops>=(E.loopAfter||3)){key=E.loopTo;E=part.endings[key]}
   const T=typeof E.text==="function"?E.text(S,P):(E.text||[]);
@@ -123,11 +124,11 @@ async function ending(key){
   const pre=pendingPre?`<p class="pre">${esc(pendingPre)}</p>`:"";pendingPre=null;
   const log=Object.entries(part.endings).map(([k,e])=>P.endings[part.id+":"+k]?`<li class="got">${esc(e.title)}</li>`:`<li class="no">${e.secret?"скрытая концовка":"???"}</li>`).join("");
   const next=SN.PARTS.find(p=>p.n===part.n+1);
-  const nextOpen=!part.noSave&&next&&(next.file||next.href)&&(!next.requires||next.requires(P));
+  const nextOpen=!part.noSave&&E.next!==false&&next&&(next.file||next.href)&&(!next.requires||next.requires(P));
   sheetHTML(`${pre}
    <p class="hand">концовка</p>
    <h2 class="endtitle">${esc(E.title)}</h2>
-   <span class="tag ${E.canon?"canon":"alt"}">${E.canon?"так было в фике":"этого в фике не было"}</span>
+   <span class="tag ${E.canon?"canon":"alt"}">${esc(E.tag||(E.canon?"так было в фике":"этого в фике не было"))}</span>
    ${T.map(p=>`<p>${esc(p)}</p>`).join("")}
    <ul class="log">${log}</ul>
    ${part.noSave?"":`<div class="savebox"><p style="font-size:13px;margin:0 0 6px"><b>Твой путь сохранён.</b> Следующая часть сама подхватит его на этом устройстве. Для другого устройства вот код:</p>

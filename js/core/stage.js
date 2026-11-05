@@ -336,6 +336,58 @@ env("room",g=>{
   const L=new THREE.PointLight(0xd8d0c8,.9,7,2);L.position.set(1,2.4,1);g.add(L);
 },{focus:{crack:[.1,2.95,0]}});
 env("void",g=>{},{fog:[1,6],bg:0x000000});
+/* ---------- локации части 0 ---------- */
+/* квартира Джирайи над магазином (модель: дешёвая комната, loc_flat). Заглушка: кухня и тёплая лампа */
+env("flat",g=>{
+  g.add(at(box(8,.05,7,M(0x6a6a66)),0,-.025,0));
+  g.add(at(box(8,2.9,.15,M(0xd8d2c4)),0,1.45,-3.2));
+  g.add(at(box(3,.9,.6,M(0xe2dccb)),-.5,.45,-2.85));
+  g.add(at(box(1.2,.05,.8,M(0x4a3020)),2,.75,-1.6));
+  const L=new THREE.PointLight(0xffd6a0,1.3,9,2);L.position.set(0,2.5,-.6);L.castShadow=true;g.add(L);
+  const W=new THREE.PointLight(0x9ab4d8,.5,8,2);W.position.set(3.5,1.8,1.5);g.add(W);
+},{fog:[7,18],bg:0x14110f});
+/* граница: ночная дорога в снегу, машина с зажжёнными фарами (скан, loc_border) */
+env("border",g=>{
+  g.add(at(box(40,.05,40,M(0xc8d0dc)),0,-.025,0));
+  const car=at(box(1.9,1.4,4.6,M(0x2a2e36)),1.6,.7,-1.2);car.rotation.y=.5;g.add(car);
+  const L=new THREE.SpotLight(0xfff0d0,2.2,14,.6,.6,1.5);L.position.set(.8,.8,1.2);L.target.position.set(-1,0,5);g.add(L,L.target);
+  const M2=new THREE.DirectionalLight(0x8aa0c8,.55);M2.position.set(-4,8,3);g.add(M2);
+},{fog:[4,22],bg:0x0c1018});
+/* Торонто: седьмой этаж, окно во двор, напротив дом (loc_toronto, без своей модели комнаты: стены из кода) */
+env("toronto",g=>{
+  const wall=M(0x8a8478),wd=-2.2;
+  g.add(at(box(8,.05,6,M(0x5a4636)),0,-.025,0));               // пол
+  g.add(at(box(2.85,3,.18,wall),-2.475,1.5,wd));               // стена слева от окна
+  g.add(at(box(2.85,3,.18,wall),2.475,1.5,wd));                // справа
+  g.add(at(box(2.1,.9,.18,wall),0,.45,wd));                    // под окном
+  g.add(at(box(2.1,.75,.18,wall),0,2.625,wd));                 // над окном
+  g.add(at(box(2.3,.06,.42,M(0xd8d4c8)),0,.92,wd+.06));        // подоконник
+  [-1.02,1.02].forEach(x=>g.add(at(box(.08,1.36,.22,M(0xd8d4c8)),x,1.58,wd)));  // рама
+  g.add(at(box(2.1,.08,.22,M(0xd8d4c8)),0,2.22,wd));
+  const open=at(box(1,1.3,.04,M(0x9fb6c8,{transparent:true,opacity:.18,roughness:.1})),-.6,1.58,wd+.45);open.rotation.y=-.9;g.add(open); // открытая створка
+  g.add(at(box(.18,3,6,wall),-3.9,1.5,.8));
+  g.add(at(box(8,.1,6,M(0x6a645c)),0,3,.8));
+  const lamp=new THREE.PointLight(0xffc890,.9,7,2);lamp.position.set(1.8,2.4,.6);lamp.castShadow=true;g.add(lamp);
+  const out=new THREE.PointLight(0x8aa6d8,.9,6,2);out.position.set(0,1.6,wd-.8);g.add(out);
+  const sky=at(box(60,40,.1,new THREE.MeshBasicMaterial({color:0x0a0e18})),0,0,-40);g.add(sky);
+},{fog:[9,60],bg:0x0a0e18});
+/* ---------- снег: shot.snow = [cx,cy,cz, w,h,d] (коробка, где он идёт) или 1 — вокруг точки взгляда ---------- */
+const SNOW_N=900,snowG=new THREE.BufferGeometry(),snowP=new Float32Array(SNOW_N*3),snowV=new Float32Array(SNOW_N);
+for(let i=0;i<SNOW_N;i++){snowP[i*3]=Math.random();snowP[i*3+1]=Math.random();snowP[i*3+2]=Math.random();snowV[i]=.25+Math.random()*.35}
+snowG.setAttribute("position",new THREE.BufferAttribute(snowP.slice(),3));
+const snow=new THREE.Points(snowG,new THREE.PointsMaterial({color:0xf2f6ff,size:.035,transparent:true,opacity:.85,depthWrite:false}));
+snow.visible=false;snow.frustumCulled=false;snow.userData.noLook=true;scene.add(snow);let snowBox=[0,0,0,1,1,1];
+function setSnow(s){
+  snow.visible=!!s.snow;if(!s.snow)return;
+  snowBox=Array.isArray(s.snow)?s.snow:[s.look[0],1.8,s.look[2],10,4,10];
+}
+function snowTick(dt,t){
+  if(!snow.visible)return;const a=snow.geometry.attributes.position,[cx,cy,cz,w,h,d]=snowBox;
+  for(let i=0;i<SNOW_N;i++){snowP[i*3+1]-=dt*snowV[i]/h;if(snowP[i*3+1]<0)snowP[i*3+1]+=1;
+    a.array[i*3]=cx+(snowP[i*3]-.5)*w+Math.sin(t*.7+i)*.08;a.array[i*3+1]=cy+(snowP[i*3+1]-.5)*h;a.array[i*3+2]=cz+(snowP[i*3+2]-.5)*d}
+  a.needsUpdate=true;
+}
+
 const fl1=new THREE.PointLight(0xff7a2a,3,9,2);fl1.position.set(0,1.2,-1.2);fire.add(fl1);
 const fl2=new THREE.PointLight(0xff4a1a,2,7,2);fl2.position.set(1.5,.8,-1.6);fire.add(fl2);
 const embersG=new THREE.BufferGeometry();const EN=160;const ep=new Float32Array(EN*3);for(let i=0;i<EN;i++){ep[i*3]=-3+Math.random()*6;ep[i*3+1]=Math.random()*3;ep[i*3+2]=-2.5+Math.random()*2}
@@ -388,7 +440,7 @@ function groundY(x,z){
 }
 function reground(){
   if(!curShot) return;
-  Object.keys(curShot.cast).forEach(k=>{const c=CH[k];if(!c||!c.root.visible)return;const y=groundY(c.target.x,c.target.z);c.target.y=y;c.root.position.y=y});
+  Object.keys(curShot.cast).forEach(k=>{const c=CH[k];if(!c||!c.root.visible)return;const a=curShot.cast[k]||[];const y=groundY(c.target.x,c.target.z)+(a[4]||0);c.target.y=y;c.root.position.y=y});
 }
 function setShot(name,fireOn){
   const s=SHOTS[name];if(!s){console.warn("[SN] нет мизансцены",name);return}
@@ -404,7 +456,7 @@ function setShot(name,fireOn){
     if(c.ghost) c.ghost.root.visible=false;
     const a=s.cast[k];
     if(!a){c.root.visible=false;return}
-    c.root.visible=true;c.target.set(a[0],groundY(a[0],a[1]),a[1]);c.targetRy=a[2];
+    c.root.visible=true;c.target.set(a[0],groundY(a[0],a[1])+(a[4]||0),a[1]);c.targetRy=a[2];
     c.root.position.copy(c.target);c.root.rotation.y=a[2];
     setPose(k,a[3]);
     if(envChanged){c.cur={}}
@@ -413,6 +465,7 @@ function setShot(name,fireOn){
   if(CH.tsunade) CH.tsunade.setFace("neutral");
   if(ENV.home&&ENV.home.userData.door) ENV.home.userData.door.intensity=s.door?1.6:0;
   camPosT.set(...s.cam);camLookT.set(...s.look);
+  setSnow(s);
   if(SN.look) SN.look.forShot(s);
   if(envChanged){camPos.copy(camPosT);camLook.copy(camLookT)}
 }
@@ -466,6 +519,7 @@ function loop(now){
   });
   if(curShot&&curShot.walk&&walkX<3.2){walkX+=dt*.45;Object.keys(curShot.cast).forEach(k=>{const a=curShot.cast[k];if(CH[k]&&a[3]&&/walk|k_hold/.test(a[3])){CH[k].target.x=a[0]+walkX;CH[k].root.position.x=CH[k].target.x}});camLookT.x=curShot.look[0]+walkX;camPosT.x=curShot.cam[0]+walkX;
     if(walkX>=3.2){if(CH.naruto)setPose("naruto","hold_hand");if(CH.kurama)setPose("kurama","stand")}}
+  snowTick(dt,t);
   if(fire.visible){flames.forEach(f=>{f.scale.y=.8+Math.sin(t*8+f.userData.p)*.25+Math.sin(t*19+f.userData.p*3)*.06;f.scale.x=f.scale.z=.9+Math.sin(t*6+f.userData.p)*.1});
     fl1.intensity=2.6+Math.sin(t*13)*.5+Math.sin(t*29)*.25;fl2.intensity=1.8+Math.sin(t*9+1)*.4;
     const pa=embersG.attributes.position;for(let i=0;i<EN;i++){let y=pa.getY(i)+dt*(.4+(i%7)*.08);if(y>3.2)y=0;pa.setY(i,y)}pa.needsUpdate=true}

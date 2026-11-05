@@ -133,11 +133,28 @@ function attachLocation(group,placeholder,id){
       const keep=entry.keepPlaceholder|0; /* первые N кусков заглушки остаются (например ровная земля под ногами) */
       placeholder.children.forEach((ch,i)=>{if(i>=keep)ch.traverse(o=>{if(o.isMesh)o.visible=false})});
       group.add(model);
+      /* изнутри видны однослойные стены: "doubleSide":true рисует их с обеих сторон */
+      if(entry.doubleSide) model.traverse(o=>{if(o.isMesh&&o.material){o.material.side=THREE.DoubleSide}});
+      /* скрыть куски модели по имени узла (кондиционер, лишнее поле): "hide":["Имя",…] */
+      if(entry.hide) model.traverse(o=>{if(entry.hide.some(h=>o.name.indexOf(h)>=0))o.visible=false});
       if(SN.stage&&SN.stage.reground){group.updateMatrixWorld(true);SN.stage.reground()}
+      return loadProps(group,entry);
     });
   }).catch(e=>console.warn("[SN] локация не загрузилась, остаётся заглушка:",id,e));
 }
 
+/* реквизит и фон к локации: "props":[{"file":"props/sofa.glb","offset":[x,y,z],"scale":1,"rotY":0,"edges":false}] */
+function loadProps(group,entry){
+  return Promise.all((entry.props||[]).map(pr=>loadGLTF(pr.file).then(gltf=>{
+    const m=gltf.scene.clone(true);
+    if(pr.scale) m.scale.setScalar(pr.scale);
+    if(pr.offset) m.position.set(...pr.offset);
+    if(pr.rotY) m.rotation.y=pr.rotY;
+    m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.frustumCulled=false}});
+    if(SN.look){SN.look.adopt(m);if(pr.edges===false)SN.look.noEdges(m)}
+    group.add(m);
+  }).catch(e=>console.warn("[SN] реквизит не загрузился:",pr.file,e))));
+}
 /* в manifest "clips": {"поза":"ИмяКлипа"} — играет по кругу;
    {"clip":"Имя","once":true} — один раз и замирает на последнем кадре;
    {"clip":"Имя","at":1.2} — стоп-кадр на этой секунде (например, «на колене» из «встать с колена») */
