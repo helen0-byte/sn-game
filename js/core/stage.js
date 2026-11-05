@@ -406,7 +406,7 @@ function setFace(who,f){const c=getChar(who);if(c)c.setFace(f)}
 /* ---------- бледный контур: «тело делает своё» ---------- */
 /* контур отслаивается от фигуры и делает то, что выбрал игрок (ghostPose),
    цветное тело делает обратное (bodyPose) */
-function ghostify(R,mat){R.root.traverse(o=>{if(!o.isMesh)return;if(o.material===outlineM){o.visible=false;return}o.material=mat;o.castShadow=false})}
+function ghostify(R,mat){R.root.traverse(o=>{if(!o.isMesh)return;if(o.material===outlineM){o.visible=false;return}o.material=mat;o.castShadow=false});if(SN.look)SN.look.noEdges(R.root)}
 function ghost(who,ghostPose,bodyPose,ms){
   ms=ms||2600;const c=getChar(who);if(!c)return Promise.resolve();
   if(!c.ghost){
@@ -456,7 +456,7 @@ function loop(now){
   if(ENV.shop&&ENV.shop.visible&&ENV.shop.userData.rec) ENV.shop.userData.rec.rotation.y+=dt*3.5;
   const k=1-Math.pow(.15,rdt);camPos.lerp(camPosT,k);camLook.lerp(camLookT,k);
   camera.position.copy(camPos);camera.position.x+=Math.sin(t*.3)*.04;camera.position.y+=Math.sin(t*.23)*.03;camera.lookAt(camLook);
-  renderer.render(scene,camera);requestAnimationFrame(loop);
+  if(!(SN.look&&SN.look.render(renderer,scene,camera)))renderer.render(scene,camera);requestAnimationFrame(loop);
 }
 function init(el){
   stageEl=el;
@@ -472,5 +472,5 @@ function init(el){
 SN.stage={init,THREE,scene,camera,defineChar,getChar,chars:CH,env,ENV,defineShot,shots:SHOTS,setShot,setPose,setFace,poses:P,ghost,flinch,focusOn,screenOf,
   get timeScale(){return timeScale},set timeScale(v){timeScale=v},
   helpers:{M,T,box,at,ol,sph,limb,spikes,outlineM},
-  get canvas(){return renderer&&renderer.domElement}};
+  get canvas(){return renderer&&renderer.domElement},get renderer(){return renderer}};
 })();

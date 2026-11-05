@@ -53,6 +53,7 @@ function attach(R,id,opt){
       const model=THREE.SkeletonUtils?THREE.SkeletonUtils.clone(gltf.scene):gltf.scene.clone(true);
       normalize(model,entry);
       model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(opt.ghost){o.material=opt.ghost;o.castShadow=false}}});
+      if(SN.look){if(opt.ghost)SN.look.noEdges(model);else SN.look.adopt(model)}
       /* заглушку прячем, но её группы остаются: на них держатся позы и микродвижения */
       R.hips.traverse(o=>{if(o.isMesh)o.visible=false});
       R.root.add(model);R.glb=model;R.glbY=model.position.y;R.entry=entry;
@@ -83,6 +84,9 @@ function attachLocation(group,placeholder,id){
       if(entry.offset) model.position.set(...entry.offset);
       if(entry.rotY) model.rotation.y=entry.rotY;
       model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});
+      if(SN.look){if(entry.look!==false)SN.look.adopt(model);
+        /* сканы и сильно упрощённые модели дают кашу из линий: "edges":false — контур только вокруг персонажей */
+        if(entry.edges===false)SN.look.noEdges(model)}
       /* свет из заглушки оставляем, геометрию прячем */
       const keep=entry.keepPlaceholder|0; /* первые N кусков заглушки остаются (например ровная земля под ногами) */
       placeholder.children.forEach((ch,i)=>{if(i>=keep)ch.traverse(o=>{if(o.isMesh)o.visible=false})});
