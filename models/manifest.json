@@ -3,11 +3,54 @@
     "naruto": {
       "file": "characters/naruto.glb",
       "height": 1.68,
-      "source": "Meshy (rig + Mixamo Walking/Running), Барабулка 05.11.2026; оригинал Meshy_AI_anime_boy_rigged_20261105_animated_mixamo_All_animation.glb в Загрузках",
+      "source": "Meshy (rig + 16 анимаций из библиотеки Meshy), Барабулка 05.11.2026; оригинал «Meshy_AI_anime_boy_rigged_20261105_animated_mixamo_All_animation (1).glb» в Загрузках",
       "clips": {
+        "stand": "Idle_3",
+        "idle": "Idle_3",
+        "hold_hand": "Idle_3",
+        "hugged": "Idle_3",
+        "glow": "Idle_3",
+        "m_stand": "Idle_3",
         "walk": "Walking",
         "k_hold": "Walking",
-        "run": "Running"
+        "run": "Running",
+        "drunk": "Unsteady_Walk",
+        "sit": "Chair_Sit_Idle_M",
+        "table": "Chair_Sit_Idle_M",
+        "eyes": "Chair_Sit_Idle_M",
+        "lean": "Chair_Sit_Idle_M",
+        "look_up": "Chair_Sit_Idle_M",
+        "upside": "Chair_Sit_Idle_M",
+        "m_sit": "Chair_Sit_Idle_M",
+        "sit_drink": "Sit_and_Drink",
+        "drink": "Stand_and_Drink",
+        "ground": "Sit_Cross_Legged_on_Floor",
+        "crosslegged": "Sit_Cross_Legged_on_Floor",
+        "rock": "Sit_Cross_Legged_on_Floor",
+        "look_down": "Sit_Cross_Legged_on_Floor",
+        "wall": "Sit_Cross_Legged_on_Floor",
+        "slump": "Sit_Cross_Legged_on_Floor",
+        "reach_up": "Sit_Cross_Legged_on_Floor",
+        "kneel": {
+          "clip": "Kneel_on_One_Knee_and_Stand",
+          "at": 0.1
+        },
+        "depressed": "Depressed_Full_Turn_Left",
+        "head_pain": "Head_Hold_in_Pain",
+        "lie": "Sleep_Normally",
+        "lie_side": {
+          "clip": "Stand_To_Side_Lying",
+          "once": true
+        },
+        "toss": "Toss_and_Turn",
+        "fall": {
+          "clip": "falling_down",
+          "once": true
+        },
+        "push": {
+          "clip": "Step_Forward_and_Push",
+          "once": true
+        }
       },
       "armDown": [
         "y",

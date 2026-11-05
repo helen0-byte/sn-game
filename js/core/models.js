@@ -91,13 +91,22 @@ function attachLocation(group,placeholder,id){
   }).catch(e=>console.warn("[SN] локация не загрузилась, остаётся заглушка:",id,e));
 }
 
+/* в manifest "clips": {"поза":"ИмяКлипа"} — играет по кругу;
+   {"clip":"Имя","once":true} — один раз и замирает на последнем кадре;
+   {"clip":"Имя","at":1.2} — стоп-кадр на этой секунде (например, «на колене» из «встать с колена») */
 function playClip(R,name){
   if(!R.mixer||!R.clips) return;
-  const clip=R.clips[name]||R.clips[(R.entry&&R.entry.clips&&R.entry.clips[name])||""];
-  if(!clip) {if(R.cur && R.action){R.action.fadeOut(.3);R.action=null}return}
+  let spec=(R.entry&&R.entry.clips&&R.entry.clips[name])||(R.clips[name]?name:null);
+  if(typeof spec==="string") spec={clip:spec};
+  const clip=spec&&R.clips[spec.clip];
+  if(!clip){if(R.action){R.action.fadeOut(.3);R.action=null}return}
   const a=R.mixer.clipAction(clip);
-  if(R.action===a) return;
-  a.reset().fadeIn(.35).play();if(R.action)R.action.fadeOut(.35);R.action=a;
+  if(R.action===a&&R.actionSpec===JSON.stringify(spec)) return;
+  a.reset();a.enabled=true;a.timeScale=1;
+  if(spec.once){a.setLoop(THREE.LoopOnce,1);a.clampWhenFinished=true}else a.setLoop(THREE.LoopRepeat,Infinity);
+  if(spec.at!=null){a.time=Math.min(spec.at,clip.duration);a.timeScale=0}
+  if(R.action&&R.action!==a){a.play();a.crossFadeFrom(R.action,.35,false)}else a.fadeIn(.35).play();
+  R.action=a;R.actionSpec=JSON.stringify(spec);
 }
 
 /* лица — варианты текстур: "faces":{"smile":"faces/naruto_smile.webp",…} */
