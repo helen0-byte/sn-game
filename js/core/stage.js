@@ -426,7 +426,7 @@ const ST={ // мизансцены пролога (для будущего пе�
 /* shot: {env, cast:{кто:[x,z,поворот,поза]}, cam:[x,y,z], look:[x,y,z], face, shiver, fire, door} */
 const SHOTS=Object.assign({},ST);
 function defineShot(name,s){SHOTS[name]=s}
-let curShot=null,walkX=0;
+let curShot=null,walkX=0,shotAge=0;
 /* земля под ногами: модели локаций (тротуар, порог, ковёр) бывают выше нуля, тогда ноги уходили в них.
    Пускаем луч сверху вниз в точке, где стоит герой, и ставим его на первое, что ниже колена */
 const _rc=new THREE.Raycaster(),_down=new THREE.Vector3(0,-1,0),_from=new THREE.Vector3();
@@ -467,9 +467,12 @@ function setShot(name,fireOn){
   camPosT.set(...s.cam);camLookT.set(...s.look);
   setSnow(s);
   if(SN.look) SN.look.forShot(s);
-  if(envChanged){camPos.copy(camPosT);camLook.copy(camLookT)}
+  /* кадр (still:true): склейка вместо проезда камеры, позы стоят, камера почти неподвижна;
+     fov — фокусное (меньше = длиннее объектив, плоский киношный план); push — медленный наезд, метров в секунду */
+  shotAge=0;camera.fov=s.fov||42;camera.updateProjectionMatrix();
+  if(envChanged||s.still){camPos.copy(camPosT);camLook.copy(camLookT)}
 }
-function setPose(who,p){const c=getChar(who);if(!c)return;c.pose=P[p]||P.stand;c.poseName=p;if(c.mixer&&SN.models)SN.models.playClip(c,p)}
+function setPose(who,p){const c=getChar(who);if(!c)return;c.pose=P[p]||P.stand;c.poseName=p;if(c.mixer&&SN.models)SN.models.playClip(c,p,!!(curShot&&curShot.still))}
 function setFace(who,f){const c=getChar(who);if(c)c.setFace(f)}
 
 /* ---------- бледный контур: «тело делает своё» ---------- */
@@ -524,8 +527,14 @@ function loop(now){
     fl1.intensity=2.6+Math.sin(t*13)*.5+Math.sin(t*29)*.25;fl2.intensity=1.8+Math.sin(t*9+1)*.4;
     const pa=embersG.attributes.position;for(let i=0;i<EN;i++){let y=pa.getY(i)+dt*(.4+(i%7)*.08);if(y>3.2)y=0;pa.setY(i,y)}pa.needsUpdate=true}
   if(ENV.shop&&ENV.shop.visible&&ENV.shop.userData.rec) ENV.shop.userData.rec.rotation.y+=dt*3.5;
+  shotAge+=rdt;
+  if(curShot&&curShot.still){
+    const push=Math.min(shotAge,40)*(curShot.push||0);
+    _from.subVectors(camLookT,camPosT).normalize().multiplyScalar(push);
+    camPos.copy(camPosT).add(_from);camLook.copy(camLookT);camera.position.copy(camPos);camera.lookAt(camLook);
+  }else{
   const k=1-Math.pow(.15,rdt);camPos.lerp(camPosT,k);camLook.lerp(camLookT,k);
-  camera.position.copy(camPos);camera.position.x+=Math.sin(t*.3)*.04;camera.position.y+=Math.sin(t*.23)*.03;camera.lookAt(camLook);
+  camera.position.copy(camPos);camera.position.x+=Math.sin(t*.3)*.04;camera.position.y+=Math.sin(t*.23)*.03;camera.lookAt(camLook);}
   if(!(SN.look&&SN.look.render(renderer,scene,camera)))renderer.render(scene,camera);requestAnimationFrame(loop);
 }
 function init(el){

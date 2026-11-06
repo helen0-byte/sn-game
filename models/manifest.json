@@ -50,6 +50,14 @@
         "push": {
           "clip": "Step_Forward_and_Push",
           "once": true
+        },
+        "sill_hunch": {
+          "clip": "Chair_Sit_Idle_M",
+          "at": 4
+        },
+        "sill_edge": {
+          "clip": "Chair_Sit_Idle_M",
+          "at": 0.5
         }
       },
       "armDown": [

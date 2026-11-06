@@ -158,7 +158,7 @@ function loadProps(group,entry){
 /* в manifest "clips": {"поза":"ИмяКлипа"} — играет по кругу;
    {"clip":"Имя","once":true} — один раз и замирает на последнем кадре;
    {"clip":"Имя","at":1.2} — стоп-кадр на этой секунде (например, «на колене» из «встать с колена») */
-function playClip(R,name){
+function playClip(R,name,instant){
   if(!R.mixer||!R.clips) return;
   let spec=(R.entry&&R.entry.clips&&R.entry.clips[name])||(R.clips[name]?name:null);
   if(typeof spec==="string") spec={clip:spec};
@@ -166,6 +166,10 @@ function playClip(R,name){
   if(!clip){if(R.action){R.action.fadeOut(.3);R.action=null}return}
   const a=R.mixer.clipAction(clip);
   if(R.action===a&&R.actionSpec===JSON.stringify(spec)) return;
+  /* кадр: поза встаёт сразу, без перетекания из прошлой */
+  if(instant){R.mixer.stopAllAction();a.reset();a.enabled=true;a.setEffectiveWeight(1);a.timeScale=spec.at!=null?0:1;
+    if(spec.once){a.setLoop(THREE.LoopOnce,1);a.clampWhenFinished=true}else a.setLoop(THREE.LoopRepeat,Infinity);
+    if(spec.at!=null)a.time=Math.min(spec.at,clip.duration);a.play();R.mixer.update(0);R.action=a;R.actionSpec=JSON.stringify(spec);return}
   a.reset();a.enabled=true;a.timeScale=1;
   if(spec.once){a.setLoop(THREE.LoopOnce,1);a.clampWhenFinished=true}else a.setLoop(THREE.LoopRepeat,Infinity);
   if(spec.at!=null){a.time=Math.min(spec.at,clip.duration);a.timeScale=0}
