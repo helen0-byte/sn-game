@@ -506,6 +506,38 @@ function focusOn(pointName,dist){
 }
 function screenOf(v){const p=v.clone().project(camera);return {x:(p.x+1)/2,y:(1-p.y)/2}}
 
+/* ---------- поза руками ----------
+   shot.bones = {naruto:{RightArm:[x,y,z], Head:[x,y,z], …}} — повороты костей в градусах (оси самой кости),
+   накладываются поверх стоп-кадра клипа. Так ставятся объятия, руки на подоконнике и всё, чего нет в библиотеке */
+const _e=new THREE.Euler(),_bq=new THREE.Quaternion(),D2R=Math.PI/180;
+function bend(c,map){
+  if(!c.boneByName){c.boneByName={};c.glb.traverse(o=>{if(o.isBone)c.boneByName[o.name.replace(/^mixamorig:?/,"")]=o})}
+  for(const k in map){const b=c.boneByName[k];if(!b)continue;const r=map[k];
+    if(!c.mixer||!c.action){if(!b.userData.rest)b.userData.rest=b.quaternion.clone();b.quaternion.copy(b.userData.rest)}
+    _e.set(r[0]*D2R,r[1]*D2R,r[2]*D2R);b.quaternion.multiply(_bq.setFromEuler(_e))}
+}
+/* shot.reach = {naruto:{RightHand:[x,y,z], LeftHand:[…], Head:[…]}} — кисть (или голова) тянется к точке сцены:
+   плечо и локоть доворачиваются сами (CCD). Точка — на спине другого героя, на подоконнике и т. п. */
+const _bp=new THREE.Vector3(),_ep=new THREE.Vector3(),_tp=new THREE.Vector3(),_v1=new THREE.Vector3(),_v2=new THREE.Vector3(),_rq=new THREE.Quaternion(),_wq=new THREE.Quaternion(),_pq=new THREE.Quaternion();
+const CHAIN={RightHand:["RightForeArm","RightArm","RightShoulder"],LeftHand:["LeftForeArm","LeftArm","LeftShoulder"],Head:["Neck","Spine2"],
+  RightFoot:["RightLeg","RightUpLeg"],LeftFoot:["LeftLeg","LeftUpLeg"]};
+function reach(c,map){
+  if(!c.boneByName) bend(c,{});
+  for(const end in map){const E=c.boneByName[end],chain=(CHAIN[end]||[]).map(n=>c.boneByName[n]).filter(Boolean);if(!E||!chain.length)continue;
+    _tp.set(...map[end]);
+    for(let it=0;it<12;it++){for(const b of chain){
+      c.root.updateMatrixWorld(true);
+      b.getWorldPosition(_bp);E.getWorldPosition(_ep);
+      _v1.subVectors(_ep,_bp).normalize();_v2.subVectors(_tp,_bp).normalize();
+      _rq.setFromUnitVectors(_v1,_v2);
+      /* мягко, чтобы плечо не выворачивалось: ключица почти не участвует */
+      const w=b===chain[chain.length-1]&&chain.length>2?.15:1;_rq.slerp(_wq.identity(),1-w);
+      b.getWorldQuaternion(_wq);b.parent.getWorldQuaternion(_pq);
+      b.quaternion.copy(_pq.invert().multiply(_rq).multiply(_wq));
+    }}
+  }
+  c.root.updateMatrixWorld(true);
+}
 /* ---------- цикл ---------- */
 let clock=0,last=0,timeScale=1;
 function resize(){if(!renderer)return;const r=stageEl.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/Math.max(1,r.height);camera.updateProjectionMatrix()}
@@ -515,6 +547,8 @@ function loop(now){
   Object.values(CH).forEach(c=>{
     if(c.root.visible)applyPose(c,reduce?0:t,dt);
     if(c.mixer)c.mixer.update(dt);
+    if(c.glb&&curShot&&curShot.bones&&curShot.bones[c.id])bend(c,curShot.bones[c.id]);
+    if(c.glb&&curShot&&curShot.reach&&curShot.reach[c.id])reach(c,curShot.reach[c.id]);
     if(c.cigTip)c.cigTip.material.color.setHSL(.05,1,.45+Math.sin(t*2)*.1);
     const g=c.ghost;
     if(g&&g.root.visible){g.age+=rdt;applyPose(g,reduce?0:t,rdt);if(g.mixer)g.mixer.update(rdt);

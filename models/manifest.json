@@ -58,6 +58,10 @@
         "sill_edge": {
           "clip": "Chair_Sit_Idle_M",
           "at": 0.5
+        },
+        "still_stand": {
+          "clip": "Idle_3",
+          "at": 1
         }
       },
       "armDown": [
@@ -83,6 +87,10 @@
         "step_back": {
           "clip": "Crouch_and_Step_Back",
           "once": true
+        },
+        "still_stand": {
+          "clip": "Idle_7",
+          "at": 1
         }
       }
     },

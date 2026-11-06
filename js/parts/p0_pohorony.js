@@ -16,14 +16,18 @@ SN.stage.defineShot("p0_talk",{env:"flat",style:"film_night",cast:{naruto:[.3,-1
 SN.stage.defineShot("p0_alone",{env:"flat",style:"film_night",cast:{naruto:[1.75,-1.05,-1.2,"sit"]},cam:[-.4,1.5,1.6],look:[1.4,.8,-1.3],face:"sad",shiver:1});
 SN.stage.defineShot("p0_night",{env:"street",style:"film_night",cast:{naruto:[0,.3,0,"walk"]},cam:[-.8,1.5,3],look:[0,1,0],face:"sad",shiver:1});
 /* спешл: граница, Торонто */
-SN.stage.defineShot("p0_hold",{env:"flat",style:"film_night",cast:{naruto:[.3,-1.85,3.14,"stand"],sai:[.25,-2.2,0,"stand"]},cam:[-.5,1.55,-.7],look:[.25,1.45,-2.05],face:"cry"});
+/* объятие собрано руками: кисти Наруто тянутся к точкам на спине Сая (reach), голова на плече (bones).
+   Сай стоит «как деревянный», руки вдоль тела — так в тексте */
+SN.stage.defineShot("p0_hold",{env:"flat",style:"film_night",still:1,fov:30,push:.006,cast:{naruto:[.3,-1.36,0,"still_stand"],sai:[.3,-1.1,3.14,"still_stand"]},
+  bones:{naruto:{Head:[10,35,10],Neck:[10,10,0],LeftArm:[20,0,-50],RightArm:[20,0,50]}},reach:{naruto:{LeftHand:[.22,1.12,-.96],RightHand:[.4,1.17,-.96]}},
+  cam:[-.8,1.55,.6],look:[.3,1.35,-1.2],face:"cry"});
 SN.stage.defineShot("p0_border",{env:"border",style:"film_night",snow:[0,2,1,14,5,14],cast:{naruto:[-.4,2.2,.3,"stand"],sai:[.3,2.1,-.2,"stand"]},cam:[-1.6,1.6,6.2],look:[0,1,1],face:"neutral",shiver:1});
 SN.stage.defineShot("p0_toronto",{env:"toronto",style:"film_night",snow:[0,1.5,-7,12,7,9],cast:{naruto:[-2.95,.55,1.57,"sit"],sai:[-.1,-1.3,-1.9,"idle2"]},cam:[2.4,1.7,3.2],look:[-1.2,.9,-.4],face:"neutral"});
 /* окно — пробный «кинокадр» (still): позы стоят, камера не плавает, склейки вместо проездов.
    Ноги прячет стена под окном, Сай за кадром: игрок видит то, что видит и чувствует Наруто */
 SN.stage.defineShot("p0_window",{env:"toronto",style:"film_night",still:1,fov:30,push:.006,snow:[0,1.5,-4,6,5,5],cast:{naruto:[-.45,-2.0,-1.57,"sill_hunch",.42]},cam:[1.0,1.35,-4.6],look:[-.35,1.2,-2.0],face:"cry"});
-SN.stage.defineShot("p0_window_out",{env:"toronto",style:"film_night",still:1,fov:32,push:.008,snow:[0,1.0,-4,6,5,5],cast:{naruto:[-.1,-2.3,3.14,"sill_edge",.42]},cam:[1.5,.55,-4.4],look:[-.1,1.05,-2.3],face:"cry"});
-SN.stage.defineShot("p0_window_in",{env:"toronto",style:"film_night",still:1,fov:34,push:.01,snow:[0,1.0,-4,6,5,5],cast:{naruto:[-.1,-2.3,3.14,"sill_edge",.42]},cam:[.5,1.25,.2],look:[-.1,1.2,-2.3],face:"happycry"});
+SN.stage.defineShot("p0_window_out",{env:"toronto",style:"film_night",still:1,fov:32,push:.008,snow:[0,1.0,-4,6,5,5],cast:{naruto:[-.1,-2.45,3.14,"sill_edge",.47]},reach:{naruto:{LeftHand:[.12,.97,-2.2],RightHand:[-.32,.97,-2.2]}},cam:[1.5,.55,-4.4],look:[-.1,1.05,-2.3],face:"cry"});
+SN.stage.defineShot("p0_window_in",{env:"toronto",style:"film_night",still:1,fov:34,push:.01,snow:[0,1.0,-4,6,5,5],cast:{naruto:[-.1,-2.45,3.14,"sill_edge",.47]},reach:{naruto:{LeftHand:[.12,.97,-2.2],RightHand:[-.32,.97,-2.2]}},cam:[.5,1.25,.2],look:[-.1,1.2,-2.3],face:"happycry"});
 SN.stage.defineShot("p0_sleep",{env:"toronto",style:"film_night",snow:[0,1.5,-7,12,7,9],cast:{naruto:[-3.1,.55,0,"lie",.3],sai:[-.6,-1.4,-1.9,"stand"]},cam:[1.6,1.7,3],look:[-2.4,.6,-.2],face:"neutral"});
 
 SN.part({
