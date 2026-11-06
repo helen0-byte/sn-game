@@ -427,6 +427,7 @@ const ST={ // мизансцены пролога (для будущего пе�
 const SHOTS=Object.assign({},ST);
 function defineShot(name,s){SHOTS[name]=s}
 let curShot=null,walkX=0,shotAge=0;
+const shotSpot=new THREE.SpotLight(0xffd8a8,3,14,.6,.35,1.5);shotSpot.castShadow=true;shotSpot.shadow.mapSize.set(2048,2048);shotSpot.shadow.bias=-.004;shotSpot.shadow.normalBias=.04;shotSpot.visible=false;scene.add(shotSpot);scene.add(shotSpot.target);
 /* земля под ногами: модели локаций (тротуар, порог, ковёр) бывают выше нуля, тогда ноги уходили в них.
    Пускаем луч сверху вниз в точке, где стоит герой, и ставим его на первое, что ниже колена */
 const _rc=new THREE.Raycaster(),_down=new THREE.Vector3(0,-1,0),_from=new THREE.Vector3();
@@ -469,6 +470,9 @@ function setShot(name,fireOn){
   if(SN.look) SN.look.forShot(s);
   /* кадр (still:true): склейка вместо проезда камеры, позы стоят, камера почти неподвижна;
      fov — фокусное (меньше = длиннее объектив, плоский киношный план); push — медленный наезд, метров в секунду */
+  /* spot: {pos,target,int,color} — свой прожектор кадра (тени на стене); dim — во сколько раз пригасить остальной свет */
+  if(s.spot){shotSpot.position.set(...s.spot.pos);shotSpot.target.position.set(...s.spot.target);shotSpot.intensity=s.spot.int||3;shotSpot.color.setHex(s.spot.color||0xffd8a8);shotSpot.visible=true}else shotSpot.visible=false;
+  scene.traverse(o=>{if(o.isLight&&o!==shotSpot){if(o.userData.baseI==null)o.userData.baseI=o.intensity;o.intensity=o.userData.baseI*(s.dim||1)}});
   shotAge=0;camera.fov=s.fov||42;camera.updateProjectionMatrix();
   if(envChanged||s.still){camPos.copy(camPosT);camLook.copy(camLookT)}
 }
