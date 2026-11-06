@@ -110,6 +110,52 @@
       "rotY": 0,
       "keepPlaceholder": 1,
       "credit": "«New York Cartoon City Kitbash Kit promo» (https://sketchfab.com/3d-models/new-york-cartoon-city-kitbash-kit-promo-d0eaea60624f4096925883a0d2574eca), Jungle Jim, CC BY 4.0"
+    },
+    "loc_flat": {
+      "file": "locations/jiraiya_flat.glb",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotY": 0,
+      "keepPlaceholder": 0,
+      "doubleSide": true,
+      "credit": "«An old cheap room in Chinatown» (https://sketchfab.com/3d-models/an-old-cheap-room-in-chinatown-9c2ec26be3cb4d9b91d51755e7210fdd), Qifan Zhang, CC BY 4.0"
+    },
+    "loc_border": {
+      "file": "locations/border_car.glb",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotY": 0,
+      "keepPlaceholder": 0,
+      "edges": false,
+      "credit": "«Chevrolet in the snow» (https://sketchfab.com/3d-models/chevrolet-in-the-snow-61befedd07774fb8ada78f6da3733149), Neo_minigan, CC BY 4.0"
+    },
+    "loc_toronto": {
+      "file": "locations/toronto_house.glb",
+      "offset": [
+        -16,
+        -8,
+        -24
+      ],
+      "rotY": 0,
+      "keepPlaceholder": 99,
+      "props": [
+        {
+          "file": "props/sofa.glb",
+          "offset": [
+            -1.25,
+            0,
+            0.8
+          ],
+          "rotY": 3.14159
+        }
+      ],
+      "credit": "«Russian apartment building / night scene» (https://sketchfab.com/3d-models/russian-apartment-building-night-scene-f7fc406a6fa94b76b709a36914df17ca), uliana, CC BY 4.0; «Vintage sofa» (https://sketchfab.com/3d-models/vintage-sofa-0ddbd945ebf5410da5fe7ae436784b18), Jeremski, CC BY 4.0"
     }
   }
 }
