@@ -1,0 +1,495 @@
+{
+  "schema_version": 1,
+  "models": [
+    {
+      "file": "Meshy_AI_1970s_gentleman_rigged_20261108_animated_mixamo_All_animation (1).glb",
+      "path": "Meshy_AI_1970s_gentleman_rigged_20261108_animated_mixamo_All_animation (1).glb",
+      "bytes": 27385316,
+      "sha256": "c0a72bbc09218eb013507f47ae7c7887c81171da448e2c419f1b22fa774c15a6",
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24,
+          "joint_names": [
+            "mixamorig:Hips",
+            "mixamorig:Spine",
+            "mixamorig:Spine1",
+            "mixamorig:Spine2",
+            "mixamorig:Neck",
+            "mixamorig:Head",
+            "mixamorig:HeadTop_End",
+            "headfront",
+            "mixamorig:LeftShoulder",
+            "mixamorig:LeftArm",
+            "mixamorig:LeftForeArm",
+            "mixamorig:LeftHand",
+            "mixamorig:RightShoulder",
+            "mixamorig:RightArm",
+            "mixamorig:RightForeArm",
+            "mixamorig:RightHand",
+            "mixamorig:LeftUpLeg",
+            "mixamorig:LeftLeg",
+            "mixamorig:LeftFoot",
+            "mixamorig:LeftToeBase",
+            "mixamorig:RightUpLeg",
+            "mixamorig:RightLeg",
+            "mixamorig:RightFoot",
+            "mixamorig:RightToeBase"
+          ],
+          "inverse_bind_matrices_accessor": 282
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "animation_count": 2,
+      "texture_count": 2,
+      "images": [
+        {
+          "name": "texture_0",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        },
+        {
+          "name": "texture_0_metallic_roughness",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        }
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "vertices": 40095,
+      "triangles": 30522,
+      "identity": null,
+      "identity_status": "unconfirmed"
+    },
+    {
+      "file": "Meshy_AI_Gaara_Rigged_20261108_animated_mixamo_All_animation.glb",
+      "path": "Meshy_AI_Gaara_Rigged_20261108_animated_mixamo_All_animation.glb",
+      "bytes": 26492160,
+      "sha256": "597cad3725fcf1d3c7d7f0bd568a4c8fbd4bdcdb507bc27db4614c62feaaf938",
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24,
+          "joint_names": [
+            "mixamorig:Hips",
+            "mixamorig:Spine",
+            "mixamorig:Spine1",
+            "mixamorig:Spine2",
+            "mixamorig:Neck",
+            "mixamorig:Head",
+            "mixamorig:HeadTop_End",
+            "headfront",
+            "mixamorig:LeftShoulder",
+            "mixamorig:LeftArm",
+            "mixamorig:LeftForeArm",
+            "mixamorig:LeftHand",
+            "mixamorig:RightShoulder",
+            "mixamorig:RightArm",
+            "mixamorig:RightForeArm",
+            "mixamorig:RightHand",
+            "mixamorig:LeftUpLeg",
+            "mixamorig:LeftLeg",
+            "mixamorig:LeftFoot",
+            "mixamorig:LeftToeBase",
+            "mixamorig:RightUpLeg",
+            "mixamorig:RightLeg",
+            "mixamorig:RightFoot",
+            "mixamorig:RightToeBase"
+          ],
+          "inverse_bind_matrices_accessor": 282
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "animation_count": 2,
+      "texture_count": 2,
+      "images": [
+        {
+          "name": "texture_0",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        },
+        {
+          "name": "texture_0_metallic_roughness",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        }
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "vertices": 49833,
+      "triangles": 30916,
+      "identity": null,
+      "identity_status": "unconfirmed"
+    },
+    {
+      "file": "Meshy_AI_crimson_hair_char_rigged_20261105_animated_mixamo_All_animation (1).glb",
+      "path": "Meshy_AI_crimson_hair_char_rigged_20261105_animated_mixamo_All_animation (1).glb",
+      "bytes": 36402476,
+      "sha256": "96b32db67b2d400c7c4ab1554e43603117c829cddf4056cc94127b3d8bbe7d09",
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24,
+          "joint_names": [
+            "mixamorig:Hips",
+            "mixamorig:Spine",
+            "mixamorig:Spine1",
+            "mixamorig:Spine2",
+            "mixamorig:Neck",
+            "mixamorig:Head",
+            "mixamorig:HeadTop_End",
+            "headfront",
+            "mixamorig:LeftShoulder",
+            "mixamorig:LeftArm",
+            "mixamorig:LeftForeArm",
+            "mixamorig:LeftHand",
+            "mixamorig:RightShoulder",
+            "mixamorig:RightArm",
+            "mixamorig:RightForeArm",
+            "mixamorig:RightHand",
+            "mixamorig:LeftUpLeg",
+            "mixamorig:LeftLeg",
+            "mixamorig:LeftFoot",
+            "mixamorig:LeftToeBase",
+            "mixamorig:RightUpLeg",
+            "mixamorig:RightLeg",
+            "mixamorig:RightFoot",
+            "mixamorig:RightToeBase"
+          ],
+          "inverse_bind_matrices_accessor": 550
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        },
+        {
+          "name": "Chair_Sit_Idle_F",
+          "channels": 48,
+          "duration_seconds": 11.333333015441895
+        },
+        {
+          "name": "Idle_7",
+          "channels": 48,
+          "duration_seconds": 8.733333587646484
+        },
+        {
+          "name": "Stand_and_Chat",
+          "channels": 48,
+          "duration_seconds": 5.166666507720947
+        },
+        {
+          "name": "Wave_One_Hand",
+          "channels": 48,
+          "duration_seconds": 4.099999904632568
+        }
+      ],
+      "animation_count": 6,
+      "texture_count": 2,
+      "images": [
+        {
+          "name": "texture_0",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        },
+        {
+          "name": "texture_0_metallic_roughness",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        }
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "vertices": 69814,
+      "triangles": 30952,
+      "identity": null,
+      "identity_status": "unconfirmed"
+    },
+    {
+      "file": "Meshy_AI_punk_bassist_rigged_20261108_animated_mixamo_All_animation (1).glb",
+      "path": "Meshy_AI_punk_bassist_rigged_20261108_animated_mixamo_All_animation (1).glb",
+      "bytes": 28016276,
+      "sha256": "9713f717bfacadc2baffd1e6c50419577fd9aeeed636d76058bb96db02dfd8c9",
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24,
+          "joint_names": [
+            "mixamorig:Hips",
+            "mixamorig:Spine",
+            "mixamorig:Spine1",
+            "mixamorig:Spine2",
+            "mixamorig:Neck",
+            "mixamorig:Head",
+            "mixamorig:HeadTop_End",
+            "headfront",
+            "mixamorig:LeftShoulder",
+            "mixamorig:LeftArm",
+            "mixamorig:LeftForeArm",
+            "mixamorig:LeftHand",
+            "mixamorig:RightShoulder",
+            "mixamorig:RightArm",
+            "mixamorig:RightForeArm",
+            "mixamorig:RightHand",
+            "mixamorig:LeftUpLeg",
+            "mixamorig:LeftLeg",
+            "mixamorig:LeftFoot",
+            "mixamorig:LeftToeBase",
+            "mixamorig:RightUpLeg",
+            "mixamorig:RightLeg",
+            "mixamorig:RightFoot",
+            "mixamorig:RightToeBase"
+          ],
+          "inverse_bind_matrices_accessor": 282
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "animation_count": 2,
+      "texture_count": 2,
+      "images": [
+        {
+          "name": "texture_0",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        },
+        {
+          "name": "texture_0_metallic_roughness",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        }
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "vertices": 37277,
+      "triangles": 31078,
+      "identity": null,
+      "identity_status": "unconfirmed"
+    },
+    {
+      "file": "Meshy_AI_punk_drummer_rigged_20261105_animated_mixamo_All_animation (1).glb",
+      "path": "Meshy_AI_punk_drummer_rigged_20261105_animated_mixamo_All_animation (1).glb",
+      "bytes": 30619396,
+      "sha256": "3b3bc507371fa4ce6bce1a6fd7bdeaf2f62d6bee71fdc7bc8f7ac1b2fd94377b",
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24,
+          "joint_names": [
+            "mixamorig:Hips",
+            "mixamorig:Spine",
+            "mixamorig:Spine1",
+            "mixamorig:Spine2",
+            "mixamorig:Neck",
+            "mixamorig:Head",
+            "mixamorig:HeadTop_End",
+            "headfront",
+            "mixamorig:LeftShoulder",
+            "mixamorig:LeftArm",
+            "mixamorig:LeftForeArm",
+            "mixamorig:LeftHand",
+            "mixamorig:RightShoulder",
+            "mixamorig:RightArm",
+            "mixamorig:RightForeArm",
+            "mixamorig:RightHand",
+            "mixamorig:LeftUpLeg",
+            "mixamorig:LeftLeg",
+            "mixamorig:LeftFoot",
+            "mixamorig:LeftToeBase",
+            "mixamorig:RightUpLeg",
+            "mixamorig:RightLeg",
+            "mixamorig:RightFoot",
+            "mixamorig:RightToeBase"
+          ],
+          "inverse_bind_matrices_accessor": 282
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "animation_count": 2,
+      "texture_count": 2,
+      "images": [
+        {
+          "name": "texture_0",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        },
+        {
+          "name": "texture_0_metallic_roughness",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        }
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "vertices": 36333,
+      "triangles": 31090,
+      "identity": null,
+      "identity_status": "unconfirmed"
+    },
+    {
+      "file": "Meshy_AI_punk_guitarist_rigged_20261105_animated_mixamo_All_animation (1).glb",
+      "path": "Meshy_AI_punk_guitarist_rigged_20261105_animated_mixamo_All_animation (1).glb",
+      "bytes": 28176872,
+      "sha256": "91b15760d0e3246ac24c7bcf68a53f6817f397ec791f3902a06238e4eecdd560",
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24,
+          "joint_names": [
+            "mixamorig:Hips",
+            "mixamorig:Spine",
+            "mixamorig:Spine1",
+            "mixamorig:Spine2",
+            "mixamorig:Neck",
+            "mixamorig:Head",
+            "mixamorig:HeadTop_End",
+            "headfront",
+            "mixamorig:LeftShoulder",
+            "mixamorig:LeftArm",
+            "mixamorig:LeftForeArm",
+            "mixamorig:LeftHand",
+            "mixamorig:RightShoulder",
+            "mixamorig:RightArm",
+            "mixamorig:RightForeArm",
+            "mixamorig:RightHand",
+            "mixamorig:LeftUpLeg",
+            "mixamorig:LeftLeg",
+            "mixamorig:LeftFoot",
+            "mixamorig:LeftToeBase",
+            "mixamorig:RightUpLeg",
+            "mixamorig:RightLeg",
+            "mixamorig:RightFoot",
+            "mixamorig:RightToeBase"
+          ],
+          "inverse_bind_matrices_accessor": 282
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "animation_count": 2,
+      "texture_count": 2,
+      "images": [
+        {
+          "name": "texture_0",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        },
+        {
+          "name": "texture_0_metallic_roughness",
+          "mime_type": "image/png",
+          "uri": null,
+          "width": 4096,
+          "height": 4096,
+          "format": "PNG"
+        }
+      ],
+      "material_count": 1,
+      "mesh_count": 1,
+      "primitive_count": 1,
+      "vertices": 50807,
+      "triangles": 31046,
+      "identity": null,
+      "identity_status": "unconfirmed"
+    }
+  ],
+  "verification": "Structural inspection only; not full Khronos validation or animation playback. Character identities unconfirmed; Gaara is a filename label only.",
+  "paths_relative_to": "this directory (models/source/meshy-originals/)"
+}
