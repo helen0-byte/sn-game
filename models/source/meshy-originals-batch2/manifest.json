@@ -1,0 +1,267 @@
+{
+  "schema_version": 1,
+  "paths_relative_to": "this directory",
+  "verification": "Header/chunk/JSON/bufferView checks and SHA256 match to source Windows inventory only; not full Khronos validation, visual inspection, Walking/rig/cloth playback, or game integration.",
+  "models": [
+    {
+      "path": "Meshy_AI_Hidan_Rigged_20261109_animated_mixamo_All_animation.glb",
+      "bytes": 27859916,
+      "sha256": "3592247b63d96a555e5070c3303947c694e269ca931ac4e535979525fe27d997",
+      "source_sha256_matches": true,
+      "glb_version": 2,
+      "chunks_complete": true,
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "external_resources": [],
+      "identity": null,
+      "identity_status": "filename label only; not visually verified",
+      "matches_existing_local_repo": null
+    },
+    {
+      "path": "Meshy_AI_Hinata_Church_Rigged_20261108_animated_mixamo_All_animation.glb",
+      "bytes": 30450316,
+      "sha256": "b39985470b4e831e762d716ca180e82c37b3918e0973413ce49bc6d856020772",
+      "source_sha256_matches": true,
+      "glb_version": 2,
+      "chunks_complete": true,
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "external_resources": [],
+      "identity": null,
+      "identity_status": "filename label only; not visually verified",
+      "matches_existing_local_repo": null
+    },
+    {
+      "path": "Meshy_AI_Kurama_Rigged_20261109_animated_mixamo_All_animation.glb",
+      "bytes": 28666912,
+      "sha256": "0a98fe0e914e039fa155af2a8384f94e13bead04a3fad2e194d0a4bfd3c87acd",
+      "source_sha256_matches": true,
+      "glb_version": 2,
+      "chunks_complete": true,
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "external_resources": [],
+      "identity": null,
+      "identity_status": "filename label only; not visually verified",
+      "matches_existing_local_repo": null
+    },
+    {
+      "path": "Meshy_AI_Orochimaru_Rigged_20261108_animated_mixamo_All_animation.glb",
+      "bytes": 22526852,
+      "sha256": "823e407b79504197b66f9d2cc17d34de3be6266b0d9734511e8d3c37657f1d12",
+      "source_sha256_matches": true,
+      "glb_version": 2,
+      "chunks_complete": true,
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "external_resources": [],
+      "identity": null,
+      "identity_status": "filename label only; not visually verified",
+      "matches_existing_local_repo": null
+    },
+    {
+      "path": "Meshy_AI_Punk_Naruto_Rigged_20261109_animated_mixamo_All_animation.glb",
+      "bytes": 32208296,
+      "sha256": "23879172f367c434ff71235886899733821c58437dc01abe283edccac3c03182",
+      "source_sha256_matches": true,
+      "glb_version": 2,
+      "chunks_complete": true,
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "external_resources": [],
+      "identity": null,
+      "identity_status": "filename label only; not visually verified",
+      "matches_existing_local_repo": null
+    },
+    {
+      "path": "Meshy_AI_Yamato_Rigged_20261109_animated_mixamo_All_animation.glb",
+      "bytes": 24031564,
+      "sha256": "ae66e70093f2e563e062792c13820c2a9ded890c00e5fc10c239b200c80e0b72",
+      "source_sha256_matches": true,
+      "glb_version": 2,
+      "chunks_complete": true,
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "external_resources": [],
+      "identity": null,
+      "identity_status": "filename label only; not visually verified",
+      "matches_existing_local_repo": null
+    },
+    {
+      "path": "Meshy_AI_tsunade_rigged_20261108_animated_mixamo_All_animation.glb",
+      "bytes": 24890260,
+      "sha256": "251266816c25bfef2446c93b629bfe7230f275599356feeee4b816813d022c68",
+      "source_sha256_matches": true,
+      "glb_version": 2,
+      "chunks_complete": true,
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24
+        }
+      ],
+      "animations": [
+        {
+          "name": "Running",
+          "channels": 48,
+          "duration_seconds": 0.6333333253860474
+        },
+        {
+          "name": "Walking",
+          "channels": 48,
+          "duration_seconds": 1.0333333015441895
+        }
+      ],
+      "external_resources": [],
+      "identity": null,
+      "identity_status": "filename label only; not visually verified",
+      "matches_existing_local_repo": null
+    },
+    {
+      "path": "anime-boy-rigged (1).glb",
+      "bytes": 33295120,
+      "sha256": "1de48321db08138e48d4fc5a1d2f76c1cbc31ea210e376a412ee62000125d5a1",
+      "source_sha256_matches": true,
+      "glb_version": 2,
+      "chunks_complete": true,
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24
+        }
+      ],
+      "animations": [
+        {
+          "name": "Armature|clip0|baselayer",
+          "channels": 72,
+          "duration_seconds": 0.0
+        }
+      ],
+      "external_resources": [],
+      "identity": null,
+      "identity_status": "filename label only; not visually verified",
+      "matches_existing_local_repo": null
+    },
+    {
+      "path": "street_dealer_rigged.glb",
+      "bytes": 27181612,
+      "sha256": "61ff836f19a4914a7bf40c3bb94022867ed2b67b4592896ac8893171d4e2909b",
+      "source_sha256_matches": true,
+      "glb_version": 2,
+      "chunks_complete": true,
+      "skins": [
+        {
+          "name": "Armature",
+          "joint_count": 24
+        }
+      ],
+      "animations": [
+        {
+          "name": "Armature|clip0|baselayer",
+          "channels": 72,
+          "duration_seconds": 0.0
+        }
+      ],
+      "external_resources": [],
+      "identity": null,
+      "identity_status": "filename label only; not visually verified",
+      "matches_existing_local_repo": null
+    }
+  ]
+}
