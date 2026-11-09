@@ -97,7 +97,7 @@ body{background:var(--night);color:var(--paper);font-family:var(--f-type);font-s
 #fx .white{background:#fff}
 #fx .black{background:#000}
 #fx .gray{background:#8d8b8e}
-#fx .crimson{background:radial-gradient(ellipse at center,transparent 0%,transparent 30%,#4a0010 75%,#1a0006 100%);transform:scale(1.8)}
+#fx .crimson{background:radial-gradient(ellipse at center,transparent 0%,transparent 70%,#4a0010 100%)}
 #fx .amber{background:radial-gradient(ellipse at center,rgba(255,190,90,.12),rgba(170,95,20,.5));mix-blend-mode:screen}
 #fx .cap{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-family:var(--f-hand);font-size:clamp(26px,6vw,40px);color:var(--ink);opacity:0}
 #fx .cap.light{color:var(--paper)}

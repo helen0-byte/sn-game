@@ -52,9 +52,15 @@ async function harm(o){
   mount();lockInput();
   const c=el("layer crimson");c.style.opacity=0;
   A().muffle(220,1200);A().hum(false);A().breath(13,.22,520);A().temples(92);
-  tween(c,"opacity","1",900);c.style.transform="scale(1.8)";void c.offsetWidth;
-  tween(c,"transform","scale(.55)",o.ms||5200,"ease-in");
-  await wait(o.ms||5200);
+  /* слой всегда во весь экран; от краёв наползает сам градиент: прозрачный центр сжимается.
+     (раньше слой масштабировался целиком и превращался в прямоугольник посреди экрана) */
+  const ms=o.ms||5200,t0=performance.now();let run=true;
+  (function grow(){if(!run)return;const k=Math.min(1,(performance.now()-t0)/ms),e=k*k;
+    const clear=Math.round(70-56*e),mid=Math.round(100-38*e);
+    c.style.background=`radial-gradient(ellipse at center,transparent 0%,transparent ${clear}%,#4a0010 ${mid}%,#1a0006 ${Math.max(mid+12,100-20*e)|0}%,#1a0006 100%)`;
+    if(k<1)requestAnimationFrame(grow)})();
+  tween(c,"opacity","1",900);
+  await wait(ms);run=false;
   const k=el("layer black");k.style.opacity=1;A().stop("breath");A().stop("temples");
   await wait(900);A().muffle(false);
   clear();unlockInput();
